@@ -6,6 +6,11 @@ import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.Pin;
 //import com.pi4j.io.gpio.RaspiPin;
 
+/**
+ * 
+ * @author Team Wit
+ *
+ */
 public class MotorFixed {
 	protected final static GpioController gpio = GpioFactory.getInstance();
 	// twee pinnen: 1 om voorwaarts te draaien, 1 om achterwaarts te draaien

@@ -22,7 +22,6 @@ import java.util.Arrays;
 /**
  * DistanceMonitor class to monitor distance measured by sensor
  *
- * OPMERKING!!! AUTHOR ZAL WEL MOGEN AANGEPAST WORDEN NAAR ONZE NAMEN...
  * @author Team Wit
  */
 public class DistanceMonitor {
