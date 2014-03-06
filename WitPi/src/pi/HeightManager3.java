@@ -13,19 +13,17 @@ public class HeightManager3 implements Runnable {
 	private double maxPower;
 	private double minPower;
 	private MotorPwm heightmotor;
-	private PiState state;
 	private int direction; // 0 = uit; 1 = forward; 2 = backward
 	private double accumulator;
 	
 	private double [] error;
 	
-	public HeightManager3(MotorPwm heightMotor, PiState pistate, DistanceMonitor distanceMonitor, double minPower, double maxPower){
+	public HeightManager3(MotorPwm heightMotor, DistanceMonitor distanceMonitor, double minPower, double maxPower){
 		myDistance = distanceMonitor;
 		this.maxPower = maxPower;
 		this.minPower = minPower;
 		this.heightmotor = heightMotor;
 		this.direction = 0;
-		this.state = pistate;
 		this.error = new double[10];
 		this.accumulator = 0;
 		setTargetHeight(80);
@@ -78,7 +76,6 @@ public class HeightManager3 implements Runnable {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-		state.setCurrentHeight(newDistance);
 		error[0] = targetHeight - (double)newDistance;
 		System.out.println("newDistance: "+newDistance);
 	}
@@ -91,7 +88,6 @@ public class HeightManager3 implements Runnable {
 			e.printStackTrace();
 		}
 		heightmotor.setPower(0);
-		state.setBottomMotorPower(0);
 	}
 	
 	private void startUpward(int power){
@@ -99,8 +95,6 @@ public class HeightManager3 implements Runnable {
 		heightmotor.triggerForwardOn();
 		direction = 1;
 		setPower(power);
-		state.setBottomMotorState(1);
-		state.setBottomMotorPower(power);
 	}
 	
 	private void startUpward(){
@@ -116,13 +110,10 @@ public class HeightManager3 implements Runnable {
 		heightmotor.triggerBackwardOn();
 		direction = 2;
 		setPower(power);
-		state.setBottomMotorState(2);
-		state.setBottomMotorPower(power);
 	}
 	
 	public void setTargetHeight(double newTargetHeight){
 		targetHeight = newTargetHeight;
-		state.setTargetHeight((float) newTargetHeight);
 	}
 	
 	private void setPower(double voltage) {
@@ -131,8 +122,6 @@ public class HeightManager3 implements Runnable {
 		if(voltage<minPower)
 			voltage = minPower;
 		heightmotor.setPower((int)voltage);
-		//heightmotor.setPower(0);
-		state.setBottomMotorPower((int)voltage);
 	}
 	public void stopRunning() {
 		running = false;
@@ -143,7 +132,6 @@ public class HeightManager3 implements Runnable {
 			currTime = System.currentTimeMillis();
 		}
 		heightmotor.setPower(0);
-		state.setBottomMotorPower(0);
 	}
 
 	public double getTargetHeight() {

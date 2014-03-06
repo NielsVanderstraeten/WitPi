@@ -35,12 +35,12 @@ public class MotorPwm extends MotorFixed{
 		return pwmPin.getPwm();
 	}
 	
-	/*public static void main( String[] args ) {
+	public static void main( String[] args ) {
 		try{
 			System.out.println("Hello");
 			//Motor1
-			Pin forw1 = RaspiPin.GPIO_07;
-			Pin back1 = RaspiPin.GPIO_05;
+			Pin forw = RaspiPin.GPIO_07;
+			Pin back = RaspiPin.GPIO_05;
 			MotorPwm motor = new MotorPwm(forw, back);
 			
 			motor.triggerForwardOn();
@@ -64,5 +64,5 @@ public class MotorPwm extends MotorFixed{
 		catch(InterruptedException ex){
 			Thread.currentThread().interrupt();
 		}
-	}*/
+	}
 }
