@@ -13,7 +13,7 @@ public class Listener implements Runnable
 	private boolean listening;
 	private LinkedList<String> queue = new LinkedList<String>();
 	private Thread t;
-	
+
 	public Listener(int port, Pi pi) throws IOException
 	{
 		this.pi = pi;
@@ -24,13 +24,13 @@ public class Listener implements Runnable
 	public synchronized void run()
 	{
 		while(listening){
-			
+
 			if  ( t == null || (! queue.isEmpty() && ! t.isAlive())) {
 				String c = queue.poll();
 				t = new Thread(new Executor(pi, c));
 				t.start();
 			}
-			
+
 			try{
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
@@ -38,7 +38,7 @@ public class Listener implements Runnable
 				DataInputStream in = new DataInputStream(server.getInputStream());
 				String inMsg = in.readUTF();
 				OutputStream out = server.getOutputStream();
-				DataOutputStream outData = new DataOutputStream(out);
+				DataOutputStream outData = new DataOutputStream(out); // werd gebruikt voor pistate door te sturen
 				if(inMsg.equals("takepicture")){
 					pi.takePicture();
 					File file = new File("picture.jpg");
@@ -52,28 +52,28 @@ public class Listener implements Runnable
 				}
 				else if(inMsg.equals("forwardstart")) 
 					pi.forwardStart();
-//				else if(inMsg.equals("forwardstop"))
-//					pi.forwardStop();
+				//				else if(inMsg.equals("forwardstop"))
+				//					pi.forwardStop();
 				else if(inMsg.equals("backwardstart"))
 					pi.backwardStart();				
-//				else if(inMsg.equals("backwardstop"))
-//					pi.backwardStop();
-//				else if(inMsg.equals("climbstart"))
-//					pi.climbStart();
-//				else if(inMsg.equals("climbstop"))
-//					pi.climbStop();
+				//				else if(inMsg.equals("backwardstop"))
+				//					pi.backwardStop();
+				//				else if(inMsg.equals("climbstart"))
+				//					pi.climbStart();
+				//				else if(inMsg.equals("climbstop"))
+				//					pi.climbStop();
 				//else if(inMsg.equals("descendstart"))
 				//	pi.descendStart();
-//				else if(inMsg.equals("descendstop"))
-//					pi.descendStop();
+				//				else if(inMsg.equals("descendstop"))
+				//					pi.descendStop();
 				else if(inMsg.equals("turnrightstart"))
 					pi.turnRightStart();
-//				else if(inMsg.equals("turnrightstop"))
-//					pi.turnRightStop();
+				//				else if(inMsg.equals("turnrightstop"))
+				//					pi.turnRightStop();
 				else if(inMsg.equals("turnleftstart"))
 					pi.turnLeftStart();
-//				else if(inMsg.equals("turnleftstop"))
-//					pi.turnLeftStop();
+				//				else if(inMsg.equals("turnleftstop"))
+				//					pi.turnLeftStop();
 				else if(inMsg.contains("stayatheight")) {
 					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
 					pi.goToHeight(Double.parseDouble(strings.get(1)));
@@ -151,7 +151,7 @@ public class Listener implements Runnable
 				else{
 					//out.writeUTF("error: unknown command");				
 				}
-				*/
+				 */
 				server.close();
 			}
 			catch(SocketTimeoutException s){
@@ -172,7 +172,7 @@ public class Listener implements Runnable
 			out.write(buf, 0, len);
 		}
 	}
-	
+
 	public void stopListening() {
 		listening = false;
 	}
