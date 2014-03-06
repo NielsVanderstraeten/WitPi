@@ -66,12 +66,12 @@ public class Listener implements Runnable
 				//	pi.descendStart();
 				//				else if(inMsg.equals("descendstop"))
 				//					pi.descendStop();
-				else if(inMsg.equals("turnrightstart"))
-					pi.turnRightStart();
+				//else if(inMsg.equals("turnrightstart"))
+				//	pi.turnRightStart();
 				//				else if(inMsg.equals("turnrightstop"))
 				//					pi.turnRightStop();
-				else if(inMsg.equals("turnleftstart"))
-					pi.turnLeftStart();
+				//else if(inMsg.equals("turnleftstart"))
+				//	pi.turnLeftStart();
 				//				else if(inMsg.equals("turnleftstop"))
 				//					pi.turnLeftStop();
 				//else if(inMsg.contains("stayatheight")) {
@@ -90,14 +90,14 @@ public class Listener implements Runnable
 					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
 					pi.setTargetPosition(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)));
 				}
-				else if (inMsg.contains("climb ")) {
-					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
-					pi.goToHeight(pi.getTargetHeight() + Double.parseDouble(strings.get(1)));
-				}
-				else if (inMsg.contains("descend ")) {
-					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
-					pi.goToHeight(pi.getTargetHeight() - Double.parseDouble(strings.get(1)));
-				}
+				//else if (inMsg.contains("climb ")) {
+				//	List<String> strings = Arrays.asList(inMsg.split("\\s+"));
+				//	pi.goToHeight(pi.getTargetHeight() + Double.parseDouble(strings.get(1)));
+				//}
+				//else if (inMsg.contains("descend ")) {
+				//	List<String> strings = Arrays.asList(inMsg.split("\\s+"));
+				//	pi.goToHeight(pi.getTargetHeight() - Double.parseDouble(strings.get(1)));
+				//}
 				else if(inMsg.equals("terminate")) {
 					stopListening();
 					pi.terminate();	
