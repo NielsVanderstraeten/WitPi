@@ -9,6 +9,7 @@ import com.pi4j.io.gpio.RaspiPin;
 
 public class Pi {
 	HeightManager3 myHeightManager;
+	PositionManager myPositionManager;
 	DistanceMonitor myDistance;
 	Camera myCamera;
 	MotorFixed myLeftMotor;
@@ -37,6 +38,7 @@ public class Pi {
 		myLeftMotor = new MotorFixed(forw4, back4);
 		myRightMotor = new MotorFixed(forw2, back2);
 		myHeightManager = new HeightManager3(myBottomMotor, myDistance, minPower, maxPower);
+		myPositionManager = new PositionManager(-1, -1);
 	}
 	
 	public static void main(String [] args)
@@ -177,4 +179,20 @@ public class Pi {
 	public MotorFixed getRightMotor() {
 		return myRightMotor;
 	}
+	
+	public float getLastCalculatedHeight(){
+		return myHeightManager.getLastCalculatedHeight();
+	}
+	
+	public void setPosition(int newXPos, int newYPos) {
+		myPositionManager.setCurrentXPosition(newXPos);
+		myPositionManager.setCurrentYPosition(newYPos);
+	}
+	
+	public void setTargetPosition(int xPos, int yPos){ 
+		myPositionManager.setTargetXPosition(xPos);
+		myPositionManager.setTargetYPosition(yPos);
+	}
+
+	
 }

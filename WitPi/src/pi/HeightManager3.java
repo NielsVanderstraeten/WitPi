@@ -15,6 +15,7 @@ public class HeightManager3 implements Runnable {
 	private MotorPwm heightmotor;
 	private int direction; // 0 = uit; 1 = forward; 2 = backward
 	private double accumulator;
+	private float lastCalculatedHeight = 0;
 	
 	private double [] error;
 	
@@ -65,7 +66,8 @@ public class HeightManager3 implements Runnable {
 	private void calcError(){
 		for(int i=(error.length-1); i > 0; i--)
 			error[i] = error[i-1];
-		float newDistance = myDistance.getDistance();
+		//float newDistance = myDistance.getDistance();
+		lastCalculatedHeight = myDistance.getDistance();
 //		try {
 //			PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log.txt", true)));
 //			out.write((int) newDistance);
@@ -76,8 +78,8 @@ public class HeightManager3 implements Runnable {
 //		} catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}
-		error[0] = targetHeight - (double)newDistance;
-		System.out.println("newDistance: "+newDistance);
+		error[0] = targetHeight - (double)lastCalculatedHeight;
+		System.out.println("newDistance: "+lastCalculatedHeight);
 	}
 
 	public void terminate(){
@@ -136,5 +138,9 @@ public class HeightManager3 implements Runnable {
 
 	public double getTargetHeight() {
 		return targetHeight;
+	}
+	
+	public float getLastCalculatedHeight(){
+		return lastCalculatedHeight;
 	}
 }
