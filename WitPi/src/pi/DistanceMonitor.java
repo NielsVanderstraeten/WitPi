@@ -1,4 +1,4 @@
-package components;
+package pi;
 
 /**
  * Class to monitor distance measured by a HC-SR04 distance sensor on a

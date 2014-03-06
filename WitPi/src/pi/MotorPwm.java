@@ -1,4 +1,4 @@
-package components;
+package pi;
 
 import com.pi4j.io.gpio.GpioPinPwmOutput;
 import com.pi4j.io.gpio.Pin;
