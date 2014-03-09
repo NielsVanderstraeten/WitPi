@@ -1,20 +1,17 @@
 package pi;
 
 import java.io.IOException;
-
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
-
-
 
 public class Pi {
 	HeightManager3 myHeightManager;
 	PositionManager myPositionManager;
 	DistanceMonitor myDistance;
 	Camera myCamera;
-	MotorFixed myLeftMotor;
-	MotorFixed myRightMotor;
-	MotorPwm myBottomMotor;
+	MotorFixed myTopMotor;
+	MotorFixed myLowMotor;
+	MotorPwm myHeightMotor;
 	final double maxPower = 1024;
 	final double minPower = 824;
 	
@@ -34,11 +31,11 @@ public class Pi {
 	public Pi() {
 		myDistance = new DistanceMonitor();
 		myCamera = new Camera();
-		myBottomMotor = new MotorPwm(forw1, back1);
-		myLeftMotor = new MotorFixed(forw4, back4);
-		myRightMotor = new MotorFixed(forw2, back2);
-		myHeightManager = new HeightManager3(myBottomMotor, myDistance, minPower, maxPower);
-		myPositionManager = new PositionManager(-1, -1);
+		myHeightMotor = new MotorPwm(forw1, back1);
+		myTopMotor = new MotorFixed(forw4, back4);
+		myLowMotor = new MotorFixed(forw2, back2);
+		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
+		myPositionManager = new PositionManager(new Vector(-1, -1));
 	}
 	
 	public static void main(String [] args)
@@ -79,49 +76,49 @@ public class Pi {
 	}
 	
 	public void stop() { //deze methode laat de zeppelin ogenblikkelijk stoppen met commandos uit te voeren, waarnaa hij terug bestuurbaar is door de pijltjestoetsen.
-		myLeftMotor.triggerForwardOff();
-		myLeftMotor.triggerBackwardOff();
-		myRightMotor.triggerBackwardOff();
-		myRightMotor.triggerForwardOff();
+		myTopMotor.triggerForwardOff();
+		myTopMotor.triggerBackwardOff();
+		myLowMotor.triggerBackwardOff();
+		myLowMotor.triggerForwardOff();
 	}
 	public void forwardStart(){
-		myLeftMotor.triggerForwardOn();
-		myRightMotor.triggerForwardOn();
+		myTopMotor.triggerForwardOn();
+		myLowMotor.triggerForwardOn();
 	}
 	
 	public void forwardStop() {		
-		myLeftMotor.triggerForwardOff();
-		myRightMotor.triggerForwardOff();
+		myTopMotor.triggerForwardOff();
+		myLowMotor.triggerForwardOff();
 	}
 	
 	public void backwardStart(){
-		myLeftMotor.triggerBackwardOn();
-		myRightMotor.triggerBackwardOn();
+		myTopMotor.triggerBackwardOn();
+		myLowMotor.triggerBackwardOn();
 	}
 	
 	public void backwardStop() {
-		myLeftMotor.triggerBackwardOff();
-		myRightMotor.triggerBackwardOff();
+		myTopMotor.triggerBackwardOff();
+		myLowMotor.triggerBackwardOff();
 	}
 	
 	public void turnLeftStart(){		
-		myLeftMotor.triggerBackwardOn();
-		myRightMotor.triggerForwardOn();
+		myTopMotor.triggerBackwardOn();
+		myLowMotor.triggerForwardOn();
 	}
 	
 	public void turnLeftStop() {
-		myLeftMotor.triggerBackwardOff();
-		myRightMotor.triggerForwardOff();
+		myTopMotor.triggerBackwardOff();
+		myLowMotor.triggerForwardOff();
 	}
 	
 	public void turnRightStart(){
-		myLeftMotor.triggerForwardOn();
-		myRightMotor.triggerBackwardOn();
+		myTopMotor.triggerForwardOn();
+		myLowMotor.triggerBackwardOn();
 	}
 	
 	public void turnRightStop() {
-		myLeftMotor.triggerForwardOff();
-		myRightMotor.triggerBackwardOff();
+		myTopMotor.triggerForwardOff();
+		myLowMotor.triggerBackwardOff();
 	}
 	
 	
@@ -173,11 +170,11 @@ public class Pi {
 	}
 	
 	public MotorFixed getLeftMotor() {
-		return myLeftMotor;
+		return myTopMotor;
 	}
 	
 	public MotorFixed getRightMotor() {
-		return myRightMotor;
+		return myLowMotor;
 	}
 	
 	public float getLastCalculatedHeight(){
@@ -185,13 +182,11 @@ public class Pi {
 	}
 	
 	public void setPosition(int newXPos, int newYPos) {
-		myPositionManager.setCurrentXPosition(newXPos);
-		myPositionManager.setCurrentYPosition(newYPos);
+		myPositionManager.setCurrentPosition(new Vector(newXPos, newYPos));
 	}
 	
 	public void setTargetPosition(int xPos, int yPos){ 
-		myPositionManager.setTargetXPosition(xPos);
-		myPositionManager.setTargetYPosition(yPos);
+		myPositionManager.setTargetPosition(new Vector(xPos, yPos));
 	}
 
 	

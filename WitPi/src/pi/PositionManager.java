@@ -1,30 +1,24 @@
 package pi;
 
+import java.util.ArrayList;
+
 public class PositionManager {
 	
-	private int targetXPosition;
-	private int targetYPosition;
-	private int currentXPosition;
-	private int currentYPosition;
+	private Vector targetPosition;
+	private Vector currentPosition;
+	private ArrayList<Vector> positions = new ArrayList<Vector>();
 	
-	public PositionManager(int currentXPosition, int currentYPosition){
-		this.currentXPosition = currentXPosition;
-		this.currentYPosition = currentYPosition;
+	public PositionManager(Vector currentPosition){
+		this.currentPosition = currentPosition;
+		positions.add(currentPosition);
 	}
 	
-	public void setTargetXPosition(int newXPos){
-		targetXPosition = newXPos;		
+	public void setTargetPosition(Vector newTargetPos){
+		targetPosition = newTargetPos;		
 	}
+
 	
-	public void setTargetYPosition(int newYPos){
-		targetYPosition = newYPos;
-	}
-	
-	public void setCurrentXPosition(int newXPos){
-		currentXPosition = newXPos;		
-	}
-	
-	public void setCurrentYPosition(int newYPos){
-		currentYPosition = newYPos;
+	public void setCurrentPosition(Vector newCurrentPos){
+		currentPosition = newCurrentPos;		
 	}
 }
