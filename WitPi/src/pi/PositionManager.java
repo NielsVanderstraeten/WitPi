@@ -17,7 +17,7 @@ public class PositionManager {
 	
 	public PositionManager(Vector currentPosition, Pi pi){
 		this.pi = pi;
-		realCurrent = new Vector(-1, -1);
+		realTarget = new Vector(-1, -1);
 		setCurrentPosition(currentPosition);
 		positions.add(currentPosition);
 	}
