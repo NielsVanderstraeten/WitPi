@@ -79,7 +79,7 @@ public class Listener implements Runnable
 				else if(inMsg.contains("setposition")){
 					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
 					pi.setPosition(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)));
-					pi.setRotation(Integer.parseInt(strings.get(3)));
+					pi.setRotation(Double.parseDouble(strings.get(3)));
 					pi.getMyPositionManager().moveToNextPosition();
 				}
 				else if(inMsg.contains("setgoalposition")){

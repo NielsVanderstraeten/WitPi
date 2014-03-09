@@ -11,21 +11,32 @@ public class PositionManager {
 	
 	private Vector targetPosition;
 	private Vector currentPosition;
+	private Vector realTarget, realCurrent;
 	private ArrayList<Vector> positions = new ArrayList<Vector>();
 	private Pi pi;
 	
 	public PositionManager(Vector currentPosition, Pi pi){
-		this.currentPosition = currentPosition;
 		this.pi = pi;
+		realCurrent = new Vector(-1, -1);
+		setCurrentPosition(currentPosition);
 		positions.add(currentPosition);
 	}
 	
 	public void setTargetPosition(Vector newTargetPos){
-		targetPosition = newTargetPos;		
+		realTarget = newTargetPos;		
 	}
 
 	public void setCurrentPosition(Vector newCurrentPos){
-		currentPosition = newCurrentPos;		
+		realCurrent = newCurrentPos;
+		double rotation = pi.getRotation();
+		double x = newCurrentPos.getX();
+		double y = newCurrentPos.getY();
+		double tarX = realTarget.getX();
+		double tarY = realTarget.getY();
+		
+		targetPosition = changeBase(tarX,tarY,rotation);
+		currentPosition = changeBase(x,y,rotation);
+		
 	}
 		
 	//1 = links, 2 = rechts, 0 = blijf
@@ -118,5 +129,13 @@ public class PositionManager {
 		} else { //Richting omlaag
 			return middelpunt.getDistance(new Vector(currentPosition.getX(), currentPosition.getY() + 100));
 		}
+	}
+	
+	private Vector changeBase(double x, double y, double rotation){
+		x = x - pi.getMiddelpunt().getX();
+		y = y - pi.getMiddelpunt().getY();
+		double newX = x*Math.cos(rotation) - y*Math.sin(rotation) + pi.getMiddelpunt().getX();
+		double newY = y*Math.cos(rotation) + x*Math.sin(rotation) + pi.getMiddelpunt().getY();
+		return new Vector(newX, newY);
 	}
 }
