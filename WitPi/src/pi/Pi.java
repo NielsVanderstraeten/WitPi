@@ -1,6 +1,7 @@
 package pi;
 
 import java.io.IOException;
+
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
 
@@ -9,11 +10,13 @@ public class Pi {
 	PositionManager myPositionManager;
 	DistanceMonitor myDistance;
 	Camera myCamera;
-	MotorFixed myTopMotor;
-	MotorFixed myLowMotor;
+	MotorFixed myFrontMotor;
+	MotorFixed mySideMotor;
 	MotorPwm myHeightMotor;
 	final double maxPower = 1024;
 	final double minPower = 824;
+	
+	private Vector middelpunt;
 	
 	//Motor1
 	Pin forw1 = RaspiPin.GPIO_07;
@@ -32,8 +35,8 @@ public class Pi {
 		myDistance = new DistanceMonitor();
 		myCamera = new Camera();
 		myHeightMotor = new MotorPwm(forw1, back1);
-		myTopMotor = new MotorFixed(forw4, back4);
-		myLowMotor = new MotorFixed(forw2, back2);
+		myFrontMotor = new MotorFixed(forw4, back4);
+		mySideMotor = new MotorFixed(forw2, back2);
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
 		myPositionManager = new PositionManager(new Vector(-1, -1));
 	}
@@ -76,86 +79,42 @@ public class Pi {
 	}
 	
 	public void stop() { //deze methode laat de zeppelin ogenblikkelijk stoppen met commandos uit te voeren, waarnaa hij terug bestuurbaar is door de pijltjestoetsen.
-		myTopMotor.triggerForwardOff();
-		myTopMotor.triggerBackwardOff();
-		myLowMotor.triggerBackwardOff();
-		myLowMotor.triggerForwardOff();
+		myFrontMotor.triggerForwardOff();
+		myFrontMotor.triggerBackwardOff();
+		mySideMotor.triggerBackwardOff();
+		mySideMotor.triggerForwardOff();
 	}
 	public void forwardStart(){
-		myTopMotor.triggerForwardOn();
-		myLowMotor.triggerForwardOn();
+		myFrontMotor.triggerForwardOn();
 	}
 	
 	public void forwardStop() {		
-		myTopMotor.triggerForwardOff();
-		myLowMotor.triggerForwardOff();
+		myFrontMotor.triggerForwardOff();
 	}
 	
 	public void backwardStart(){
-		myTopMotor.triggerBackwardOn();
-		myLowMotor.triggerBackwardOn();
+		myFrontMotor.triggerBackwardOn();
 	}
 	
 	public void backwardStop() {
-		myTopMotor.triggerBackwardOff();
-		myLowMotor.triggerBackwardOff();
+		myFrontMotor.triggerBackwardOff();
 	}
 	
-	public void turnLeftStart(){		
-		myTopMotor.triggerBackwardOn();
-		myLowMotor.triggerForwardOn();
+	public void leftStart(){		
+		mySideMotor.triggerForwardOn();
 	}
 	
-	public void turnLeftStop() {
-		myTopMotor.triggerBackwardOff();
-		myLowMotor.triggerForwardOff();
+	public void leftStop() {
+		mySideMotor.triggerForwardOff();
 	}
 	
-	public void turnRightStart(){
-		myTopMotor.triggerForwardOn();
-		myLowMotor.triggerBackwardOn();
+	public void rightStart(){
+		mySideMotor.triggerBackwardOn();
 	}
 	
-	public void turnRightStop() {
-		myTopMotor.triggerForwardOff();
-		myLowMotor.triggerBackwardOff();
+	public void rightStop() {
+		mySideMotor.triggerBackwardOff();
 	}
-	
-	
-	/*public void climbStart(){
-		myHeightManager.setRunning(false);
-		myBottomMotor.setPower(1024);
-		myPiState.setBottomMotorPower(1024);
-		myBottomMotor.triggerForwardOn();
-		myPiState.setBottomMotorState(1);
-	}
-	
-	public void climbStop() {
-		myBottomMotor.setPower(0);
-		myPiState.setBottomMotorPower(0);
-		myBottomMotor.triggerForwardOff();
-		myPiState.setBottomMotorState(0);
-		myHeightManager.setTargetHeight(myDistance.getDistance());
-		myHeightManager.setRunning(true);
-		
-	}
-	
-	public void descendStart(){
-		myHeightManager.setRunning(false);
-		myBottomMotor.setPower(1024);
-		myPiState.setBottomMotorPower(1024);
-		myBottomMotor.triggerBackwardOn();
-		myPiState.setBottomMotorState(2);
-	}
-	
-	public void descendStop() {
-		myBottomMotor.setPower(0);
-		myPiState.setBottomMotorPower(0);
-		myBottomMotor.triggerBackwardOff();
-		myPiState.setBottomMotorState(0);
-		myHeightManager.setTargetHeight(myDistance.getDistance());
-		myHeightManager.setRunning(true);
-	}*/
 	
 	public void goToHeight(double newTargetHeight) {
 		myHeightManager.setTargetHeight(newTargetHeight);
@@ -169,12 +128,12 @@ public class Pi {
 		return myHeightManager.getTargetHeight();
 	}
 	
-	public MotorFixed getLeftMotor() {
-		return myTopMotor;
+	public MotorFixed getFrontMotor() {
+		return myFrontMotor;
 	}
 	
-	public MotorFixed getRightMotor() {
-		return myLowMotor;
+	public MotorFixed getSideMotor() {
+		return mySideMotor;
 	}
 	
 	public float getLastCalculatedHeight(){
@@ -187,6 +146,53 @@ public class Pi {
 	
 	public void setTargetPosition(int xPos, int yPos){ 
 		myPositionManager.setTargetPosition(new Vector(xPos, yPos));
+	}
+	
+	public void forward(int amount) {
+		for (int i = 0; i < amount; i++) {
+			forwardStart();
+			waitForXMillis(amount);
+			forwardStop();
+		}
+	}
+	
+	public void backward(int amount) {
+		for (int i = 0; i < amount; i++) {
+			backwardStart();
+			waitForXMillis(amount);
+			backwardStop();
+		}
+	}
+	
+	public void left(int amount) {
+		for (int i = 0; i < amount; i++) {
+			leftStart();
+			waitForXMillis(amount);
+			leftStop();
+		}
+	}
+	
+	public void right(int amount) {
+		for (int i = 0; i < amount; i++) {
+			rightStart();
+			waitForXMillis(amount);
+			rightStop();
+		}
+	}
+	
+	private void waitForXMillis(int number) {
+		long referentionTime = System.currentTimeMillis();
+		while (System.currentTimeMillis() < referentionTime + (long)number) {
+			//no-op
+		}
+	}
+	
+	public void setMiddelpunt(int x, int y) {
+		middelpunt = new Vector(x, y);
+	}
+	
+	public Vector getMiddelpunt() {
+		return middelpunt;
 	}
 
 	

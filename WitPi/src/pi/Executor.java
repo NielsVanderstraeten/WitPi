@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 public class Executor implements Runnable{
 	
 	private String command;
@@ -95,7 +96,7 @@ public class Executor implements Runnable{
 			double b = 43;
 			double c = 1535;
 			double amount = a * Math.pow(Integer.parseInt(strings.get(1).toString()), 2) + b * Integer.parseInt(strings.get(1).toString()) + c;
-			turnLeftPulse((int)((amount-getTurnStopTime(angle))/380*1.2));
+			leftPulse((int)((amount-getTurnStopTime(angle))/380*1.2));
 			turnRight(getTurnStopTime(angle));
 		}
 		else if (command.contains("turnright ")) {
@@ -107,7 +108,7 @@ public class Executor implements Runnable{
 			double b = 43;
 			double c = 1535;
 			double amount = a * Math.pow(Integer.parseInt(strings.get(1).toString()), 2) + b * Integer.parseInt(strings.get(1).toString()) + c;
-			turnRightPulse((int)((amount-getTurnStopTime(angle))/380*1.2));
+			rightPulse((int)((amount-getTurnStopTime(angle))/380*1.2));
 			turnLeft(getTurnStopTime(angle));
 		}
 
@@ -191,29 +192,21 @@ public class Executor implements Runnable{
 		}
 	}
 	
-	public void turnRightPulse(int amount) {
+	public void rightPulse(int amount) {
 		for (int i = 0; i < amount; i++) {
-			pi.getRightMotor().triggerBackwardOn();
-			waitForXMillis(turnbackwardOnExtraTime);
-			pi.getLeftMotor().triggerForwardOn();
-			waitForXMillis(turnforwardOn);
-			pi.getLeftMotor().triggerForwardOff();
-			waitForXMillis(turnbackwardOnExtraTime);
-			pi.getRightMotor().triggerBackwardOff();
-			waitForXMillis(turnOff);
+			pi.rightStart();
+			waitForXMillis(backwardOn);
+			pi.rightStop();
+			waitForXMillis(backwardOff);
 		}
 	}
 	
-	public void turnLeftPulse(int amount) {
+	public void leftPulse(int amount) {
 		for (int i = 0; i < amount; i++) {
-			pi.getLeftMotor().triggerBackwardOn();
-			waitForXMillis(turnbackwardOnExtraTime);
-			pi.getRightMotor().triggerForwardOn();
-			waitForXMillis(turnforwardOn);
-			pi.getRightMotor().triggerForwardOff();
-			waitForXMillis(turnbackwardOnExtraTime);
-			pi.getLeftMotor().triggerBackwardOff();
-			waitForXMillis(turnOff);
+			pi.leftStart();
+			waitForXMillis(backwardOn);
+			pi.leftStop();
+			waitForXMillis(backwardOff);
 		}
 	}
 	
@@ -263,23 +256,23 @@ public class Executor implements Runnable{
 		pi.backwardStop();
 	}
 	
-	public void turnLeft(int time) {
-		pi.getLeftMotor().triggerBackwardOn();
-		waitForXMillis((int)(time * extraBackwardParam));
-		pi.getRightMotor().triggerForwardOn();
-		waitForXMillis(time);
-		pi.getRightMotor().triggerForwardOff();
-		waitForXMillis((int)(time * extraBackwardParam));
-		pi.getLeftMotor().triggerBackwardOff();
-	}
-	
-	public void turnRight(int time) {
-		pi.getRightMotor().triggerBackwardOn();
-		waitForXMillis((int)(time * extraBackwardParam));
-		pi.getLeftMotor().triggerForwardOn();
-		waitForXMillis(time);
-		pi.getLeftMotor().triggerForwardOff();
-		waitForXMillis((int)(time * extraBackwardParam));
-		pi.getRightMotor().triggerBackwardOff();
-	}
+//	public void turnLeft(int time) {
+//		pi.getFrontMotor().triggerBackwardOn();
+//		waitForXMillis((int)(time * extraBackwardParam));
+//		pi.getSideMotor().triggerForwardOn();
+//		waitForXMillis(time);
+//		pi.getSideMotor().triggerForwardOff();
+//		waitForXMillis((int)(time * extraBackwardParam));
+//		pi.getFrontMotor().triggerBackwardOff();
+//	}
+//	
+//	public void turnRight(int time) {
+//		pi.getSideMotor().triggerBackwardOn();
+//		waitForXMillis((int)(time * extraBackwardParam));
+//		pi.getFrontMotor().triggerForwardOn();
+//		waitForXMillis(time);
+//		pi.getFrontMotor().triggerForwardOff();
+//		waitForXMillis((int)(time * extraBackwardParam));
+//		pi.getSideMotor().triggerBackwardOff();
+//	}
 }
