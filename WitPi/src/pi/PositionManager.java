@@ -49,6 +49,10 @@ public class PositionManager {
 			return 0;
 	}
 	
+	public boolean isAtCorrectPosition() {
+		return (verticalMovement() == 0 && horizontalMovement() == 0);
+	}
+	
 	private void activateHorizontalMotor() {
 		if (horizontalMovement() == 1) {
 			//beweeg links (motor)
@@ -61,48 +65,43 @@ public class PositionManager {
 	
 	private void activateVerticalMotor() {
 		if (verticalMovement() == 1) {
-			//TODO: beweeg omhoog (motor)
+			//beweeg omhoog (motor)
 			pi.forward(forwardTime);
 		} else {
-			//TODO: beweeg omlaag (motor)
+			//beweeg omlaag (motor)
 			pi.backward(backwardTime);
 		}		
 	}
-	
+
+	//TODO: rotatione
 	public void moveToNextPosition() {			
-		boolean movedHorizonal = false;
-		boolean movedVertical = false;
-		
-		Vector middelpunt = pi.getMiddelpunt();
-		
-		//1) Trap (hoekjes) maken richting punt, totdat we op juiste x-as/y-as zitten
-		//2) Dan slechts in 1 richting bewegen
-		//3) Zeker testen zodat achteruit/vooruit motor even ver gaan
-		
-		boolean juisteXAs = (horizontalMovement() == 0);
-		boolean juisteYAs = (verticalMovement() == 0);
-		
-		if (juisteXAs && juisteYAs) {
-			//op positie, doe niks.
-		} else if (juisteXAs) {
-			//Beweeg enkel nog op de y-as
-			activateVerticalMotor();
-		} else if (juisteYAs) {
-			//Beweeg enkel nog op de x-as
-			activateHorizontalMotor();
-		} else {
-			//Beweeg in richting die het dichts bij middelpunt ligt.
-			double horDistance = calculateHorizontalDistanceToMid(middelpunt);			
-			double verDistance = calculateVerticalDistanceToMid(middelpunt);
-			
-			if (horDistance < verDistance) {
-				//Beweeg de zeppelin horizontaal
+
+		if (! isAtCorrectPosition()) {
+			Vector middelpunt = pi.getMiddelpunt();
+
+			boolean juisteXAs = (horizontalMovement() == 0);
+			boolean juisteYAs = (verticalMovement() == 0);
+
+			if (juisteXAs) {
+				//Beweeg enkel nog op de y-as
+				activateVerticalMotor();
+			} else if (juisteYAs) {
+				//Beweeg enkel nog op de x-as
 				activateHorizontalMotor();
 			} else {
-				//Beweeg de zeppelin verticaal
-				activateVerticalMotor();
-			}
-		}	
+				//Beweeg in richting die het dichts bij middelpunt ligt.
+				double horDistance = calculateHorizontalDistanceToMid(middelpunt);			
+				double verDistance = calculateVerticalDistanceToMid(middelpunt);
+
+				if (horDistance < verDistance) {
+					//Beweeg de zeppelin horizontaal
+					activateHorizontalMotor();
+				} else {
+					//Beweeg de zeppelin verticaal
+					activateVerticalMotor();
+				}
+			}	
+		}
 	}
 
 	private double calculateHorizontalDistanceToMid(Vector middelpunt) {

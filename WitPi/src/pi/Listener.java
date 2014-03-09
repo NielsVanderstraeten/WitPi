@@ -12,7 +12,7 @@ public class Listener implements Runnable
 	private Pi pi;
 	private boolean listening;
 	private LinkedList<String> queue = new LinkedList<String>();
-//	private Thread t;
+	private Thread t;
 
 	public Listener(int port, Pi pi) throws IOException
 	{
@@ -24,13 +24,7 @@ public class Listener implements Runnable
 	public synchronized void run()
 	{
 		while(listening){
-
-//			if  ( t == null || (! queue.isEmpty() && ! t.isAlive())) {
-//				String c = queue.poll();
-//				t = new Thread(new Executor(pi, c));
-//				t.start();
-//			}
-
+			
 			try{
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
@@ -85,6 +79,8 @@ public class Listener implements Runnable
 				else if(inMsg.contains("setposition")){
 					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
 					pi.setPosition(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)));
+					pi.setRotation(Integer.parseInt(strings.get(3)));
+					pi.getMyPositionManager().moveToNextPosition();
 				}
 				else if(inMsg.contains("setgoalposition")){
 					List<String> strings = Arrays.asList(inMsg.split("\\s+"));

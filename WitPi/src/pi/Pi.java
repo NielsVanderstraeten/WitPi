@@ -30,6 +30,7 @@ public class Pi {
 	//Motor4
 	Pin forw4 = RaspiPin.GPIO_12;
 	Pin back4 = RaspiPin.GPIO_14;
+	private int rotation;
 	
 	public Pi() {
 		myDistance = new DistanceMonitor();
@@ -194,6 +195,12 @@ public class Pi {
 	public Vector getMiddelpunt() {
 		return middelpunt;
 	}
+	public PositionManager getMyPositionManager() {
+		return myPositionManager;
+	}
 
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
+	}
 	
 }
