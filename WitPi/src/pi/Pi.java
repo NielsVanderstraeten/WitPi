@@ -38,7 +38,7 @@ public class Pi {
 		myFrontMotor = new MotorFixed(forw4, back4);
 		mySideMotor = new MotorFixed(forw2, back2);
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
-		myPositionManager = new PositionManager(new Vector(-1, -1));
+		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 	}
 	
 	public static void main(String [] args)
