@@ -102,6 +102,10 @@ public class Listener implements Runnable
 					stopListening();
 					pi.terminate();	
 				}
+				else if(inMsg.equals("dimensions")) {
+					List<String> strings = Arrays.asList(inMsg.split("\\s+"));
+					pi.setMiddelpunt(Integer.parseInt(strings.get(1)), Integer.parseInt(strings.get(2)));
+				}
 				// nieuwe manier, via Thread!
 				else {
 					queue.add(inMsg);
