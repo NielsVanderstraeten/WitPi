@@ -12,8 +12,6 @@ public class PositionManager {
 		this.currentYPosition = currentYPosition;
 	}
 	
-	
-	
 	public void setTargetXPosition(int newXPos){
 		targetXPosition = newXPos;		
 	}
