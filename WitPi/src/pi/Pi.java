@@ -32,20 +32,21 @@ public class Pi {
 	Pin back4 = RaspiPin.GPIO_14;
 	private double rotation;
 	
-	public Pi() {
+	public Pi(int width, int height) {
 		myDistance = new DistanceMonitor();
 		myCamera = new Camera();
 		myHeightMotor = new MotorPwm(forw1, back1);
 		myFrontMotor = new MotorFixed(forw4, back4);
 		mySideMotor = new MotorFixed(forw2, back2);
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
+		setMiddelpunt(width, height);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 	}
 	
 	public static void main(String [] args)
 	{
 		int port = Integer.parseInt(args[0]);
-		Pi pi = new Pi();
+		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
 	 		Thread t = new Thread(new Listener(port, pi));
 			Thread hm = new Thread(pi.getHeightManager());
