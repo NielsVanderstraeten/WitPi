@@ -17,7 +17,7 @@ public class PositionManager {
 	
 	public PositionManager(Vector currentPosition, Pi pi){
 		this.pi = pi;
-		realTarget = new Vector(-1, -1);
+		realTarget = pi.getMiddelpunt();
 		setCurrentPosition(currentPosition);
 		positions.add(currentPosition);
 	}
