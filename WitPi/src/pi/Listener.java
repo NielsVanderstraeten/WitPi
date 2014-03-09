@@ -12,7 +12,7 @@ public class Listener implements Runnable
 	private Pi pi;
 	private boolean listening;
 	private LinkedList<String> queue = new LinkedList<String>();
-	private Thread t;
+//	private Thread t;
 
 	public Listener(int port, Pi pi) throws IOException
 	{
@@ -25,11 +25,11 @@ public class Listener implements Runnable
 	{
 		while(listening){
 
-			if  ( t == null || (! queue.isEmpty() && ! t.isAlive())) {
-				String c = queue.poll();
-				t = new Thread(new Executor(pi, c));
-				t.start();
-			}
+//			if  ( t == null || (! queue.isEmpty() && ! t.isAlive())) {
+//				String c = queue.poll();
+//				t = new Thread(new Executor(pi, c));
+//				t.start();
+//			}
 
 			try{
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
