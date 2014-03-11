@@ -39,7 +39,7 @@ public class Pi {
 		myFrontMotor = new MotorFixed(forw4, back4);
 		mySideMotor = new MotorFixed(forw2, back2);
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
-		setMiddelpunt(width, height);
+		setMiddelpunt(width/2, height/2);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 	}
 	
