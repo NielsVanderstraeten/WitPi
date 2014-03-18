@@ -196,7 +196,7 @@ public class Pi {
 	public Vector getMiddelpunt() {
 		return middelpunt;
 	}
-	public PositionManager getPositionManager() {
+	public PositionManager getMyPositionManager() {
 		return myPositionManager;
 	}
 

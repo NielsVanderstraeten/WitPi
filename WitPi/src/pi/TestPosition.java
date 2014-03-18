@@ -19,7 +19,7 @@ public class TestPosition implements Runnable{
 		int port = Integer.parseInt(args[0]);
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
-	 		Thread t = new Thread(new TestPosition(pi));
+	 		Thread t = new Thread(new TestPosition(pi, pi.getMyPositionManager()));
 			Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
