@@ -153,7 +153,7 @@ public class Pi {
 	public void forward(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			forwardStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			forwardStop();
 //		}
 	}
@@ -161,7 +161,7 @@ public class Pi {
 	public void backward(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			backwardStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			backwardStop();
 //		}
 	}
@@ -169,7 +169,7 @@ public class Pi {
 	public void left(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			leftStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			leftStop();
 //		}
 	}
@@ -177,7 +177,7 @@ public class Pi {
 	public void right(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			rightStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			rightStop();
 //		}
 	}
