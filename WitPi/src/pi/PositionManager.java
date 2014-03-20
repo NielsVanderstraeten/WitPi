@@ -67,10 +67,10 @@ public class PositionManager {
 	private void activateHorizontalMotor() {
 		if (horizontalMovement() == 1) {
 			//beweeg links (motor)
-			pi.right(leftTime);
+			pi.right(rightTime);
 		} else {
 			//beweeg rechts (motor)
-			pi.left(rightTime);
+			pi.left(leftTime);
 		}		
 	}
 	
