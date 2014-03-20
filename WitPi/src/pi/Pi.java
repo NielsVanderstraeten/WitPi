@@ -49,12 +49,12 @@ public class Pi {
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
 	 		Thread t = new Thread(new Listener(port, pi));
-			//Thread hm = new Thread(pi.getHeightManager());
+			Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
 			//ex.setDaemon(true);
 	 		t.start();
-			//hm.start();
+			hm.start();
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -153,7 +153,7 @@ public class Pi {
 	public void forward(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			forwardStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			forwardStop();
 //		}
 	}
@@ -161,7 +161,7 @@ public class Pi {
 	public void backward(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			backwardStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			backwardStop();
 //		}
 	}
@@ -169,7 +169,7 @@ public class Pi {
 	public void left(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			leftStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			leftStop();
 //		}
 	}
@@ -177,7 +177,7 @@ public class Pi {
 	public void right(int amount) {
 //		for (int i = 0; i < amount; i++) {
 			rightStart();
-			waitForXMillis(amount/3);
+			waitForXMillis(amount);
 			rightStop();
 //		}
 	}

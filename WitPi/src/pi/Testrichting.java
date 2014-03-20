@@ -17,16 +17,16 @@ public class Testrichting implements Runnable{
 	}
 	
 	public static void main(String[] args) {
-		int port = Integer.parseInt(args[0]);
+		//int port = Integer.parseInt(args[0]);
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
-	 		Thread t = new Thread(new TestPosition(pi, pi.getMyPositionManager()));
-			Thread hm = new Thread(pi.getHeightManager());
+	 		Thread t = new Thread(new Testrichting(pi, pi.getMyPositionManager()));
+			//Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
 			//ex.setDaemon(true);
 	 		t.start();
-			hm.start();
+			//hm.start();
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -35,7 +35,14 @@ public class Testrichting implements Runnable{
 
 	@Override
 	public synchronized void run() {
-			pi.forward(1500);
-			pi.left(1500);
+			while (true) {
+				System.out.println("setForward:");
+				int inputx = reader1.nextInt();
+				System.out.println("setBackward:");
+				int inputy = reader1.nextInt();
+				pi.setTargetPosition(inputx, inputy);
+				pi.forward(inputx);
+				pi.left(inputy);
+			}
 	}
 }
