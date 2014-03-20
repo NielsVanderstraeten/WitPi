@@ -49,12 +49,12 @@ public class Pi {
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
 	 		Thread t = new Thread(new Listener(port, pi));
-			Thread hm = new Thread(pi.getHeightManager());
+			//Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
 			//ex.setDaemon(true);
 	 		t.start();
-			hm.start();
+			//hm.start();
 		}
 		catch(IOException e){
 			e.printStackTrace();

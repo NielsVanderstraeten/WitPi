@@ -79,7 +79,7 @@ public class HeightManager3 implements Runnable {
 //			e.printStackTrace();
 //		}
 		error[0] = targetHeight - (double)lastCalculatedHeight;
-		System.out.println("newDistance: "+lastCalculatedHeight);
+		//System.out.println("newDistance: "+lastCalculatedHeight);
 	}
 
 	public void terminate(){
