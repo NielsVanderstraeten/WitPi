@@ -107,9 +107,11 @@ public class PositionManager {
 				if (horDistance < verDistance) {
 					//Beweeg de zeppelin horizontaal
 					activateHorizontalMotor();
+					activateVerticalMotor();
 				} else {
 					//Beweeg de zeppelin verticaal
 					activateVerticalMotor();
+					activateHorizontalMotor();
 				}
 			}	
 		}
