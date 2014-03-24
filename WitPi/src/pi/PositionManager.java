@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class PositionManager {
 	
-	int leftTime = 500;
-	int rightTime = 1500;
-	int forwardTime = 500;
-	int backwardTime = 1500;
+	int leftTime = 200;
+	int rightTime = 600;
+	int forwardTime = 200;
+	int backwardTime = 600;
 	
 	private Vector targetPosition;
 	private Vector currentPosition;
