@@ -30,21 +30,23 @@ public class Pi {
 	//Motor4
 	Pin forw4 = RaspiPin.GPIO_12;
 	Pin back4 = RaspiPin.GPIO_14;
+	private double rotation;
 	
-	public Pi() {
+	public Pi(int width, int height) {
 		myDistance = new DistanceMonitor();
 		myCamera = new Camera();
 		myHeightMotor = new MotorPwm(forw1, back1);
 		myFrontMotor = new MotorFixed(forw4, back4);
 		mySideMotor = new MotorFixed(forw2, back2);
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
+		setMiddelpunt(width/2, height/2);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 	}
 	
 	public static void main(String [] args)
 	{
 		int port = Integer.parseInt(args[0]);
-		Pi pi = new Pi();
+		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
 	 		Thread t = new Thread(new Listener(port, pi));
 			Thread hm = new Thread(pi.getHeightManager());
@@ -149,35 +151,35 @@ public class Pi {
 	}
 	
 	public void forward(int amount) {
-		for (int i = 0; i < amount; i++) {
+//		for (int i = 0; i < amount; i++) {
 			forwardStart();
 			waitForXMillis(amount);
 			forwardStop();
-		}
+//		}
 	}
 	
 	public void backward(int amount) {
-		for (int i = 0; i < amount; i++) {
+//		for (int i = 0; i < amount; i++) {
 			backwardStart();
 			waitForXMillis(amount);
 			backwardStop();
-		}
+//		}
 	}
 	
 	public void left(int amount) {
-		for (int i = 0; i < amount; i++) {
+//		for (int i = 0; i < amount; i++) {
 			leftStart();
 			waitForXMillis(amount);
 			leftStop();
-		}
+//		}
 	}
 	
 	public void right(int amount) {
-		for (int i = 0; i < amount; i++) {
+//		for (int i = 0; i < amount; i++) {
 			rightStart();
 			waitForXMillis(amount);
 			rightStop();
-		}
+//		}
 	}
 	
 	private void waitForXMillis(int number) {
@@ -194,6 +196,15 @@ public class Pi {
 	public Vector getMiddelpunt() {
 		return middelpunt;
 	}
+	public PositionManager getMyPositionManager() {
+		return myPositionManager;
+	}
 
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
+	}
 	
+	public double getRotation(){
+		return rotation;
+	}
 }
