@@ -18,7 +18,7 @@ public class Listener implements Runnable
 	{
 		this.pi = pi;
 		serverSocket = new ServerSocket(port);
-		serverSocket.setSoTimeout(10000);
+		//serverSocket.setSoTimeout(10000);
 		listening = true;
 	}
 	public synchronized void run()
