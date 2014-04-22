@@ -15,6 +15,7 @@ public class Pi {
 	MotorPwm myHeightMotor;
 	final double maxPower = 1024;
 	final double minPower = 824;
+	private PiRabbitClient client;
 	
 	private Vector middelpunt;
 	
@@ -41,6 +42,7 @@ public class Pi {
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
 		setMiddelpunt(width/2, height/2);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
+		client = new PiRabbitClient("localhost", "tabor", this);
 	}
 	
 	public static void main(String [] args)
@@ -48,18 +50,28 @@ public class Pi {
 		int port = Integer.parseInt(args[0]);
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
-	 		Thread t = new Thread(new Listener(port, pi));
+			//TODO listener moet weg, vervangen door photo en client
+	 		//Thread t = new Thread(new Listener(port, pi));
+	 		Thread photo = new Thread(new PhotoSender(port, pi));
 			Thread hm = new Thread(pi.getHeightManager());
+			Thread client = new Thread(pi.getClient());
+			
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
 			//ex.setDaemon(true);
-	 		t.start();
+	 		//t.start();
 			hm.start();
+			client.start();
+			photo.start();
 		}
 		catch(IOException e){
 			e.printStackTrace();
 		}
 	}	
+	
+	public PiRabbitClient getClient(){
+		return client;
+	}
 	
 	public HeightManager3 getHeightManager(){
 		return myHeightManager;
@@ -86,6 +98,7 @@ public class Pi {
 		mySideMotor.triggerBackwardOff();
 		mySideMotor.triggerForwardOff();
 	}
+	
 	public void forwardStart(){
 		myFrontMotor.triggerForwardOn();
 	}
@@ -123,7 +136,8 @@ public class Pi {
 	}
 	
 	public void terminate() {
-		myHeightManager.stopRunning();		
+		client.stopRunning();
+		myHeightManager.stopRunning();	
 		System.exit(0);
 	}
 	public double getTargetHeight() {

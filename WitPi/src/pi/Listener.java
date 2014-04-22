@@ -21,10 +21,8 @@ public class Listener implements Runnable
 		//serverSocket.setSoTimeout(10000);
 		listening = true;
 	}
-	public synchronized void run()
-	{
+	public synchronized void run(){
 		while(listening){
-			
 			try{
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
