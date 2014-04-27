@@ -136,7 +136,7 @@ public class PositionManager {
 	private Vector changeBase(double x, double y, double rotation){
 		x = x - pi.getMiddelpunt().getX();
 		y = y - pi.getMiddelpunt().getY();
-		double newX = -( x*Math.cos(rotation) - y*Math.sin(rotation)) + pi.getMiddelpunt().getX();
+		double newX = - (x*Math.cos(rotation) - y*Math.sin(rotation)) + pi.getMiddelpunt().getX();
 		double newY = - (y*Math.cos(rotation) + x*Math.sin(rotation)) + pi.getMiddelpunt().getY();
 		return new Vector(newX, newY);
 	}

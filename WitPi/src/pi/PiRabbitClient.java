@@ -13,14 +13,13 @@ public class PiRabbitClient implements Runnable{
 	private Channel channel;
 	private int port;
 	private String server;
-	private String namePicture = "recv";
-	private int numberOfPicture = 0;
 	private Pi pi;
 	
 	public PiRabbitClient(String host, String exchangeName, Pi pi){
 		setUpConnection(host, exchangeName);
 		this.exchangeName = exchangeName;
 		this.pi = pi;
+		server = host;
 	}
 	
 	public PiRabbitClient(){
@@ -34,10 +33,6 @@ public class PiRabbitClient implements Runnable{
 
 	public String getServerName(){
 		return server;
-	}
-	
-	public String getNamePicture() {
-		return namePicture + numberOfPicture + ".jpg";
 	}
 	
 	private void setUpConnection(String host, String exchangeName){

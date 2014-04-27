@@ -16,28 +16,29 @@ public class PhotoSender implements Runnable {
 
 	private ServerSocket serverSocket;
 	private Pi pi;
-	private boolean listening;
+	private boolean sending;
 	private LinkedList<String> queue = new LinkedList<String>();
 	private Thread t;
 
 	public PhotoSender(int port, Pi pi) throws IOException
 	{
 		this.pi = pi;
-		serverSocket = new ServerSocket(port);
 		//serverSocket.setSoTimeout(10000);
-		listening = true;
+		sending = true;
 	}
 	
 	public void run(){
 		try{ 
-			listening = true;
-			while(listening){
+			String ip ="";
+			int port = 0;
+			sending = true;
+			while(sending){
 				long start = System.currentTimeMillis() - 500;
 				if(System.currentTimeMillis() - start > 500){
 					start = System.currentTimeMillis();
-					Socket server = serverSocket.accept();
-					DataInputStream in = new DataInputStream(server.getInputStream());
-					OutputStream out = server.getOutputStream();
+					Socket socket = new Socket(ip, port);
+					DataInputStream in = new DataInputStream(socket.getInputStream());
+					OutputStream out = socket.getOutputStream();
 					DataOutputStream outData = new DataOutputStream(out); 
 					
 					pi.takePicture();
@@ -50,7 +51,7 @@ public class PhotoSender implements Runnable {
 	
 					String inMsg = in.readUTF();
 					if(!inMsg.equals("done"))
-						System.out.println("someting");
+						System.out.println("something");
 				}
 			}
 			serverSocket.close();
@@ -72,7 +73,7 @@ public class PhotoSender implements Runnable {
 	}
 
 	public void stopListening() {
-		listening = false;
+		sending = false;
 	}
 
 }

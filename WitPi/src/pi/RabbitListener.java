@@ -68,6 +68,8 @@ public class RabbitListener implements Runnable{
 						else
 							System.out.println("position " + words[0] + ", " + words[1]);
 					}
+				} else if(topic.equals("wit.private.rotation")){
+					pi.setRotation(Integer.parseInt(message));
 				} else if(topic.equals("wit.hcommand.move")){
 					String[] words = message.split("[ ]+");
 					if(pi != null){
@@ -81,7 +83,7 @@ public class RabbitListener implements Runnable{
 						pi.goToHeight(Integer.parseInt(message));
 					else
 						System.out.println("elevate " + message);
-				} else if(topic.equals("wit.private.terminate")){
+				}else if(topic.equals("wit.private.terminate")){
 					if(pi != null){
 						if(message.equalsIgnoreCase("true")){
 							running = true;
