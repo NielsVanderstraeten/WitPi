@@ -45,7 +45,7 @@ public class PiRabbitClient implements Runnable{
 			factory.setPort(5673);
 			connection = factory.newConnection();
 			channel = connection.createChannel();
-			channel.exchangeDeclare(exchangeName, "topic"); //todo server en variabele maken
+			channel.exchangeDeclare(exchangeName, "topic");
 //			//Setting up reply 
 			//Reply niet nodig, want daarvoor hebben we RabitRecv!
 //			replyQueueName = channel.queueDeclare().getQueue();

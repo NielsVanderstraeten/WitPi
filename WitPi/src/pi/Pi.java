@@ -61,7 +61,7 @@ public class Pi {
 		int port = Integer.parseInt(args[0]);
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
-			//TODO listener moet weg, vervangen door photo en client
+			// listener moet weg, vervangen door photo en client
 	 		//Thread t = new Thread(new Listener(port, pi));
 	 		Thread photo = new Thread(new PhotoSender(port, pi));
 			Thread hm = new Thread(pi.getHeightManager());

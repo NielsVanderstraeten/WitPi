@@ -51,7 +51,7 @@ public class PositionManager {
 			return 2;
 		else
 			return 0;
-		//TODO draaien
+		//draaien
 	}
 	
 	//1 = omhoog, 2 = omlaag, 0 = blijf
