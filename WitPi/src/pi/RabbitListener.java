@@ -99,7 +99,9 @@ public class RabbitListener implements Runnable{
 		}
 		System.out.println("terminate");
 	}
+	
 	private ArrayList<String> topics;
+	
 	private void setUpTopics(){
 		topics = new ArrayList<String>();
 		topics.add("wit.info.position");
@@ -111,6 +113,7 @@ public class RabbitListener implements Runnable{
 	public void stopRunning(){
 		running = false;
 	}
+	
 	private void declareTopicBinds() throws IOException{
 		for(String topic: topics)
 			channel.queueBind(queueName, exchangeName, topic);

@@ -1,5 +1,7 @@
 package pi;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class PositionManager {
@@ -36,7 +38,9 @@ public class PositionManager {
 		
 		targetPosition = changeBase(tarX,tarY,rotation);
 		currentPosition = changeBase(x,y,rotation);
-		
+
+		System.out.println("targetPosition changed base from:" + tarX +", " + tarY + "to: " + targetPosition.getX() + ", " + targetPosition.getY());
+		System.out.println("currentPosition changed base from:" + x +", " + y + "to: " + currentPosition.getX() + ", " + currentPosition.getY());
 	}
 		
 	//1 = links, 2 = rechts, 0 = blijf
@@ -68,9 +72,11 @@ public class PositionManager {
 		if (horizontalMovement() == 1) {
 			//beweeg links (motor)
 			pi.right(rightTime);
+			System.out.println("Achteruit");
 		} else {
 			//beweeg rechts (motor)
 			pi.left(leftTime);
+			System.out.println("Vooruit");
 		}		
 	}
 	
@@ -78,13 +84,14 @@ public class PositionManager {
 		if (verticalMovement() == 1) {
 			//beweeg omhoog (motor)
 			pi.forward(forwardTime);
+			System.out.println("Rechts");
 		} else {
 			//beweeg omlaag (motor)
 			pi.backward(backwardTime);
+			System.out.println("Links");
 		}		
 	}
 
-	//TODO: rotatione
 	public void moveToNextPosition() {			
 
 		if (! isAtCorrectPosition()) {
@@ -136,8 +143,8 @@ public class PositionManager {
 	private Vector changeBase(double x, double y, double rotation){
 		x = x - pi.getMiddelpunt().getX();
 		y = y - pi.getMiddelpunt().getY();
-		double newX = - (x*Math.cos(rotation) - y*Math.sin(rotation)) + pi.getMiddelpunt().getX();
-		double newY = - (y*Math.cos(rotation) + x*Math.sin(rotation)) + pi.getMiddelpunt().getY();
+		double newX = (x*Math.cos(rotation) + y*Math.sin(rotation)) + pi.getMiddelpunt().getX();
+		double newY = (-x*Math.sin(rotation) + y*Math.cos(rotation)) + pi.getMiddelpunt().getY();
 		return new Vector(newX, newY);
 	}
 }

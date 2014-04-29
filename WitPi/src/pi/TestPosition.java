@@ -16,15 +16,13 @@ public class TestPosition implements Runnable{
 	}
 	
 	public static void main(String[] args) {
-		int port = Integer.parseInt(args[0]);
-		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+		Pi pi = new Pi(3000, 3000, true);
 		try{
-	 		Thread t = new Thread(new TestPosition(pi, pi.getMyPositionManager()));
+	 		(new TestPosition(pi, pi.getMyPositionManager())).run();
 			//Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
 			//ex.setDaemon(true);
-	 		t.start();
 			//hm.start();
 		}
 		catch(Exception e){

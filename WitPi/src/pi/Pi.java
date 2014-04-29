@@ -45,6 +45,17 @@ public class Pi {
 		client = new PiRabbitClient("localhost", "tabor", this);
 	}
 	
+	/**
+	 * Een testconstructor omdat ik geen Pi had om motoren aan te sturen.
+	 * @param width
+	 * @param height
+	 * @param test
+	 */
+	public Pi(int width, int height, boolean test){
+		setMiddelpunt(width/2, height/2);
+		myPositionManager = new PositionManager(new Vector(-1, -1), this);
+	}
+	
 	public static void main(String [] args)
 	{
 		int port = Integer.parseInt(args[0]);
