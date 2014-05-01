@@ -16,16 +16,13 @@ public class PiRabbitClient implements Runnable{
 	private Pi pi;
 	
 	public PiRabbitClient(String host, String exchangeName, Pi pi){
-		/*
-		Process p;
-		try {
-			p = Runtime.getRuntime().exec("ssh r0304874@terbank.cs.kuleuven.be -L 5672:tabor.cs.kotnet.kuleuven.be:5672 -N");
-			 p.waitFor();
-		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	   */
+//		try {
+//			Process p = Runtime.getRuntime().exec("ssh r0304874@terbank.cs.kuleuven.be -L 5672:tabor.cs.kotnet.kuleuven.be:5672 -N");
+//			p.waitFor();
+//		} catch (IOException | InterruptedException e) {
+//			e.printStackTrace();
+//		}
+	 
 		setUpConnection(host);
 		this.exchangeName = exchangeName;
 		this.pi = pi;
@@ -33,8 +30,7 @@ public class PiRabbitClient implements Runnable{
 	}
 	
 	public PiRabbitClient(){
-		this.exchangeName = "tabor";
-		setUpConnection("localhost");
+		this("localhost", "tabor", null);
 	}
 	
 	public int getPort(){
@@ -63,6 +59,7 @@ public class PiRabbitClient implements Runnable{
 //			channel.basicConsume(replyQueueName, true, consumer);
 		} catch(IOException ex){
 			System.out.println("Error in setUpConnection");
+			ex.printStackTrace();
 		}
 	}
 	
