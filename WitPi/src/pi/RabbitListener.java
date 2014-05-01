@@ -96,10 +96,10 @@ public class RabbitListener implements Runnable{
 					} else
 						System.out.println("termiante " + message);
 				} else if(topic.equals("wit.private.sendPicture")){
-					pi.takePicture();
-					File file = new File("picture.jpg");
+					//pi.takePicture();
+					//File file = new File("picture.jpg");
+					File file = new File("src/pi/photo.jpg");
 					InputStream inFile = new FileInputStream(file);
-					System.out.println("starting to send foto");
 					long size = file.length();
 					byte[] buf = new byte[8192];
 					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
