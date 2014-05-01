@@ -1,7 +1,11 @@
 package pi;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -91,6 +95,27 @@ public class RabbitListener implements Runnable{
 						}
 					} else
 						System.out.println("termiante " + message);
+				} else if(topic.equals("wit.private.sendPicture")){
+					pi.takePicture();
+					File file = new File("picture.jpg");
+					InputStream inFile = new FileInputStream(file);
+					System.out.println("starting to send foto");
+					long size = file.length();
+					byte[] buf = new byte[8192];
+					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
+					int len = 0;
+					System.out.println(size);
+					while ((len = inFile.read(buf)) != -1) {
+						if(len < 8192){
+							byte[] buf2 = new byte[len];
+							buf2 = Arrays.copyOfRange(buf, 0, len);
+							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
+						} else{
+							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
+						}
+						System.out.println(len);
+					}
+					inFile.close();
 				}
 			}
 		}
@@ -108,6 +133,7 @@ public class RabbitListener implements Runnable{
 		topics.add("wit.hcommand.elevate");
 		topics.add("wit.hcommand.move");
 		topics.add("wit.private.terminate");
+		topics.add("wit.private.sendPicture");
 	}
 	
 	public void stopRunning(){
