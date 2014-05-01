@@ -63,7 +63,7 @@ public class Pi {
 		try{
 			// listener moet weg, vervangen door photo en client
 	 		//Thread t = new Thread(new Listener(port, pi));
-	 		Thread photo = new Thread(new PhotoSender(port, pi));
+	 		//Thread photo = new Thread(new PhotoSender(port, pi));
 			Thread hm = new Thread(pi.getHeightManager());
 			Thread client = new Thread(pi.getClient());
 			
@@ -73,9 +73,9 @@ public class Pi {
 	 		//t.start();
 			hm.start();
 			client.start();
-			photo.start();
+			//photo.start();
 		}
-		catch(IOException e){
+		catch(Exception e){
 			e.printStackTrace();
 		}
 	}	
