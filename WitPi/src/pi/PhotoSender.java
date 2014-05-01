@@ -23,20 +23,19 @@ public class PhotoSender implements Runnable {
 	public PhotoSender(int port, Pi pi) throws IOException
 	{
 		this.pi = pi;
-		//serverSocket.setSoTimeout(10000);
+		serverSocket = new ServerSocket(port);
 		sending = true;
 	}
 	
 	public void run(){
 		try{ 
-			String ip ="";
-			int port = 0;
 			sending = true;
 			while(sending){
 				long start = System.currentTimeMillis() - 500;
 				if(System.currentTimeMillis() - start > 500){
 					start = System.currentTimeMillis();
-					Socket socket = new Socket(ip, port);
+					Socket socket = serverSocket.accept();
+					
 					DataInputStream in = new DataInputStream(socket.getInputStream());
 					OutputStream out = socket.getOutputStream();
 					DataOutputStream outData = new DataOutputStream(out); 
