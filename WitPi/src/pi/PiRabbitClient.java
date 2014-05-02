@@ -51,7 +51,7 @@ public class PiRabbitClient implements Runnable{
 		return server;
 	}
 	
-	private void setUpConnection(String host){
+	private void setUpConnection(){
 		try{
 			//Setting up connection
 			ConnectionFactory factory = new ConnectionFactory();
@@ -59,7 +59,7 @@ public class PiRabbitClient implements Runnable{
 			factory.setUsername("wit");
 			factory.setPassword("wit");
 			logger.info("Set login");
-			factory.setHost(host);
+			factory.setHost(server);
 			factory.setPort(5672);
 			logger.info("Set host + port");
 			connection = factory.newConnection();
@@ -108,7 +108,7 @@ public class PiRabbitClient implements Runnable{
 	private boolean running = true;
 	
 	public void run(){
-		setUpConnection(server);
+		setUpConnection();
 		
 		while(running){
 			float height = pi.getLastCalculatedHeight();
