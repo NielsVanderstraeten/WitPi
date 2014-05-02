@@ -166,7 +166,7 @@ public class RabbitListener implements Runnable{
 	}
 
 	public static void main(String[] args) throws SecurityException, IOException{
-		RabbitListener listener = new RabbitListener("localhost", "tabor", null);
+		RabbitListener listener = new RabbitListener("localhost", "server", null);
 		listener.run();
 	}
 }

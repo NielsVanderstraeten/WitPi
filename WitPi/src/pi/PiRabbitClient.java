@@ -41,7 +41,7 @@ public class PiRabbitClient implements Runnable{
 	}
 	
 	public PiRabbitClient() throws SecurityException, IOException{
-		this("localhost", "tabor", null);
+		this("localhost", "server", null);
 	}
 	
 	public int getPort(){
