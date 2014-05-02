@@ -21,7 +21,7 @@ public class RabbitListener implements Runnable{
 	private Channel channel;
 	private String queueName, exchangeName;
 	private Pi pi;
-	private String server;
+	private String host;
 	private Logger logger;
 	private FileHandler fh;
 	
@@ -33,13 +33,13 @@ public class RabbitListener implements Runnable{
         fh.setFormatter(formatter); 
         
 		this.pi = pi;
-		this.server = host;
+		this.host = host;
+		this.exchangeName = exchangeName;
 	}
 	
-	private void setUpConnection(String host, String exchangeName){
+	private void setUpConnection(){
 		Connection connection = null;
 		try {
-			this.exchangeName = exchangeName;
 			ConnectionFactory factory = new ConnectionFactory();
 			factory.setUsername("wit");
 			factory.setPassword("wit");
@@ -52,10 +52,10 @@ public class RabbitListener implements Runnable{
 			
 			channel.exchangeDeclare(exchangeName, "topic");
 			logger.info("Declared channel");
+			
 			queueName = channel.queueDeclare().getQueue();
 			
-			declareTopicBinds();
-			
+			declareTopicBinds();			
 			logger.info("Declared topics");
 			
 			channel.basicQos(1);
@@ -66,6 +66,7 @@ public class RabbitListener implements Runnable{
 		}
 		catch(Exception e){
 			System.err.println("Error in TestServer constructor");
+			e.printStackTrace();
 			logger.info("Error in constructor");
 		}
 	}
@@ -73,7 +74,7 @@ public class RabbitListener implements Runnable{
 	private boolean running = true;
 	public void run() {
 		setUpTopics();
-		setUpConnection(server, exchangeName);
+		setUpConnection();
 		
 		try{
 			QueueingConsumer.Delivery delivery;
@@ -83,7 +84,7 @@ public class RabbitListener implements Runnable{
 				topic = ""; message = ""; delivery = null;
 				delivery = consumer.nextDelivery();
 				message = new String(delivery.getBody(),"UTF-8");
-				logger.info("Got message: " + message);
+//				logger.info("Got message: " + message);
 				topic = delivery.getEnvelope().getRoutingKey();
 				
 				if(topic.equals("wit.info.position")){
@@ -143,7 +144,7 @@ public class RabbitListener implements Runnable{
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			logger.info("Error in run()");
+//			logger.info("Error in run()");
 		}
 		System.out.println("terminate");
 	}
