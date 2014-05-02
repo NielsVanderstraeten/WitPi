@@ -43,8 +43,8 @@ public class Pi {
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
 		setMiddelpunt(width/2, height/2);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
-		client = new PiRabbitClient("localhost", "server", this);
 		listener = new RabbitListener("localhost", "server", this);
+		client = new PiRabbitClient("localhost", "server", this);
 	}
 	
 	/**
