@@ -29,7 +29,7 @@ public class PiRabbitClient implements Runnable{
 //		}
 		
 		logger = Logger.getLogger("pirabbitclientlogger");  
-		fh = new FileHandler("~/rabbitclient.log");  
+		fh = new FileHandler("/rabbitclient.log");  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter); 

@@ -26,7 +26,7 @@ public class RabbitListener implements Runnable{
 	
 	public RabbitListener(String host, String exchangeName, Pi pi) throws SecurityException, IOException {
 		logger = Logger.getLogger("pirabbitlistenerlogger");  
-		fh = new FileHandler("~/rabbitlistener.log");  
+		fh = new FileHandler("/rabbitlistener.log");  
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter); 
