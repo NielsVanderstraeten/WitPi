@@ -24,19 +24,22 @@ public class RabbitListener implements Runnable{
 	private String host;
 	private Logger logger;
 	private FileHandler fh;
-	
+	private final boolean logging = true;
+
 	public RabbitListener(String host, String exchangeName, Pi pi) throws SecurityException, IOException {
-		logger = Logger.getLogger("pirabbitlistenerlogger");  
-		fh = new FileHandler("/rabbitlistener.log");  
-        logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();  
-        fh.setFormatter(formatter); 
-        
+		if (logging) {
+			logger = Logger.getLogger("pirabbitlistenerlogger");  
+			fh = new FileHandler("/rabbitlistener.log");  
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();  
+			fh.setFormatter(formatter); 
+		}
+
 		this.pi = pi;
 		this.host = host;
 		this.exchangeName = exchangeName;
 	}
-	
+
 	private void setUpConnection(){
 		Connection connection = null;
 		try {
@@ -45,37 +48,43 @@ public class RabbitListener implements Runnable{
 			factory.setPassword("wit");
 			factory.setHost(host);
 			factory.setPort(5672);
-			logger.info("Setup factory");
+			if (logging)
+				logger.info("Setup factory");
 			connection = factory.newConnection();
-			logger.info("Setup connection");
+			if (logging)
+				logger.info("Setup connection");
 			channel = connection.createChannel();
-			
+
 			channel.exchangeDeclare(exchangeName, "topic");
-			logger.info("Declared channel");
-			
+			if (logging)
+				logger.info("Declared channel");
+
 			queueName = channel.queueDeclare().getQueue();
-			
-			declareTopicBinds();			
-			logger.info("Declared topics");
-			
+
+			declareTopicBinds();	
+			if (logging)
+				logger.info("Declared topics");
+
 			channel.basicQos(1);
 			consumer = new QueueingConsumer(channel);
 			channel.basicConsume(queueName, true, consumer);
 			System.out.println("[x] Awaiting RPC requests");
-			logger.info("Awaiting RPC requests");
+			if (logging)
+				logger.info("Awaiting RPC requests");
 		}
 		catch(Exception e){
 			System.err.println("Error in TestServer constructor");
 			e.printStackTrace();
-			logger.info("Error in constructor");
+			if (logging)
+				logger.info("Error in constructor");
 		}
 	}
-	
+
 	private boolean running = true;
 	public void run() {
 		setUpTopics();
 		setUpConnection();
-		
+
 		try{
 			QueueingConsumer.Delivery delivery;
 			String message;
@@ -84,9 +93,10 @@ public class RabbitListener implements Runnable{
 				topic = ""; message = ""; delivery = null;
 				delivery = consumer.nextDelivery();
 				message = new String(delivery.getBody(),"UTF-8");
-//				logger.info("Got message: " + message);
+				if (logging)
+					logger.info("Got message: " + topic);
 				topic = delivery.getEnvelope().getRoutingKey();
-				
+
 				if(topic.equals("wit.info.position")){
 					String[] words = message.split("[ ]+");
 					if(words.length == 2){
@@ -144,13 +154,14 @@ public class RabbitListener implements Runnable{
 		}
 		catch(Exception e){
 			e.printStackTrace();
-//			logger.info("Error in run()");
+			if (logging)
+				logger.info("Error in run()");
 		}
 		System.out.println("terminate");
 	}
-	
+
 	private ArrayList<String> topics;
-	
+
 	private void setUpTopics(){
 		topics = new ArrayList<String>();
 		topics.add("wit.info.position");
@@ -159,11 +170,11 @@ public class RabbitListener implements Runnable{
 		topics.add("wit.private.terminate");
 		topics.add("wit.private.sendPicture");
 	}
-	
+
 	public void stopRunning(){
 		running = false;
 	}
-	
+
 	private void declareTopicBinds() throws IOException{
 		for(String topic: topics)
 			channel.queueBind(queueName, exchangeName, topic);

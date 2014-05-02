@@ -19,31 +19,34 @@ public class PiRabbitClient implements Runnable{
 	private Pi pi;
 	private Logger logger;
 	private FileHandler fh;
-	
+	private final boolean logging = true;
+
 	public PiRabbitClient(String host, String exchangeName, Pi pi) throws SecurityException, IOException{
-//		try {
-//			Process p = Runtime.getRuntime().exec("ssh r0304874@terbank.cs.kuleuven.be -L 5672:tabor.cs.kotnet.kuleuven.be:5672 -N");
-//			p.waitFor();
-//		} catch (IOException | InterruptedException e) {
-//			e.printStackTrace();
-//		}
-		
-//		logger = Logger.getLogger("pirabbitclientlogger");  
-//		fh = new FileHandler("/rabbitclient.log");  
-//        logger.addHandler(fh);
-//        SimpleFormatter formatter = new SimpleFormatter();  
-//        fh.setFormatter(formatter); 
+		//		try {
+		//			Process p = Runtime.getRuntime().exec("ssh r0304874@terbank.cs.kuleuven.be -L 5672:tabor.cs.kotnet.kuleuven.be:5672 -N");
+		//			p.waitFor();
+		//		} catch (IOException | InterruptedException e) {
+		//			e.printStackTrace();
+		//		}
+
+		if (logging) {
+			logger = Logger.getLogger("pirabbitclientlogger");  
+			fh = new FileHandler("/rabbitclient.log");  
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();  
+			fh.setFormatter(formatter); 
+		}
 
 		this.exchangeName = exchangeName;
 		this.pi = pi;
 		server = host;
 		setUpConnection();
 	}
-	
+
 	public PiRabbitClient() throws SecurityException, IOException{
 		this("localhost", "server", null);
 	}
-	
+
 	public int getPort(){
 		return port;
 	}
@@ -51,44 +54,50 @@ public class PiRabbitClient implements Runnable{
 	public String getServerName(){
 		return server;
 	}
-	
+
 	private void setUpConnection(){
 		try{
 			//Setting up connection
 			ConnectionFactory factory = new ConnectionFactory();
-//			logger.info("Created factory");
 			factory.setUsername("wit");
 			factory.setPassword("wit");
-//			logger.info("Set login");
 			factory.setHost(server);
 			factory.setPort(5672);
-//			logger.info("Set host + port");
+			if (logging)
+				logger.info("Setup Client factory");
 			connection = factory.newConnection();
-//			logger.info("Created connection");
+			if (logging)
+				logger.info("Created connection");
 			channel = connection.createChannel();
-//			logger.info("Created channel");
+			if (logging)
+				logger.info("Created channel");
 			channel.exchangeDeclare(exchangeName, "topic");
-//			logger.info("Declared exchange");
-//			//Setting up reply 
+			if (logging)
+				logger.info("Declared exchange");
+
+			//Setting up reply 
 			//Reply niet nodig, want daarvoor hebben we RabitRecv!
-//			replyQueueName = channel.queueDeclare().getQueue();
-//			consumer = new QueueingConsumer(channel);
-//			channel.basicConsume(replyQueueName, true, consumer);
+			//			replyQueueName = channel.queueDeclare().getQueue();
+			//			consumer = new QueueingConsumer(channel);
+			//			channel.basicConsume(replyQueueName, true, consumer);
 		} catch(IOException ex){
 			System.out.println("Error in setUpConnection");
-//			logger.info("Error in setup connection");
+			if (logging)
+				logger.info("Error in setup connection");
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public void sendMessage(String message, String topic){
 		try{
 			//Sending the message
 			channel.basicPublish(exchangeName, topic, null, message.getBytes());
-//			logger.info("Sent message");
+			if (logging)
+				logger.info("Sent message");
 			System.out.println(topic + " " + message);
 		} catch(Exception ex){
-//			logger.info("Error in sending message");
+			if (logging)
+				logger.info("Error in sending message");
 			ex.printStackTrace();
 		}
 	}
@@ -97,40 +106,46 @@ public class PiRabbitClient implements Runnable{
 	private void closeChannel(){
 		try{
 			channel.close();
-//			logger.info("Closed channel");
+			if (logging)
+				logger.info("Closed channel");
 			connection.close();
-//			logger.info("Closed connection");
+			if (logging)
+				logger.info("Closed connection");
 		} catch(IOException ex){
 			System.out.println("Error in closeChannel");
-//			logger.info("Error in closing channel");
+			if (logging)
+				logger.info("Error in closing channel");
 		}
 	}
-	
+
 	private boolean running = true;
-	
+
 	public void run(){		
 		while(running){
 			float height = pi.getLastCalculatedHeight();
-//			logger.info("Got height");
+			if (logging)
+				logger.info("Got height");
 			sendMessage("" + height, "wit.info.height");
-//			logger.info("Sent height");
+			if (logging)
+				logger.info("Sent height");
 			try{
 				Thread.sleep(500);
 			} catch (Exception e){
 				//PECH
 			}
 		}
-//		logger.info("Exitted while loop run()");
+		if (logging)
+			logger.info("Exitted while loop run()");
 		closeChannel();
 	}
-	
+
 	public void stopRunning(){
 		running = false;
 	}
-	
+
 	public static void main(String[] args) throws Exception{
 		PiRabbitClient client = new PiRabbitClient();
-		
+
 		int i = 1;
 		while(i < 10){
 			client.sendMessage(i*300 + "", "wit.info.height");
