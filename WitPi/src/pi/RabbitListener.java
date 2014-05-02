@@ -21,6 +21,7 @@ public class RabbitListener implements Runnable{
 	private Channel channel;
 	private String queueName, exchangeName;
 	private Pi pi;
+	private String server;
 	private Logger logger;
 	private FileHandler fh;
 	
@@ -31,9 +32,8 @@ public class RabbitListener implements Runnable{
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter); 
         
-		setUpTopics();
-		setUpConnection(host, exchangeName);
 		this.pi = pi;
+		this.server = host;
 	}
 	
 	private void setUpConnection(String host, String exchangeName){
@@ -72,6 +72,9 @@ public class RabbitListener implements Runnable{
 	
 	private boolean running = true;
 	public void run() {
+		setUpTopics();
+		setUpConnection(server, exchangeName);
+		
 		try{
 			QueueingConsumer.Delivery delivery;
 			String message;

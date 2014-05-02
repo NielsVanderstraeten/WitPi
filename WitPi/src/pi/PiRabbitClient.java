@@ -33,8 +33,7 @@ public class PiRabbitClient implements Runnable{
         logger.addHandler(fh);
         SimpleFormatter formatter = new SimpleFormatter();  
         fh.setFormatter(formatter); 
-	 
-		setUpConnection(host);
+
 		this.exchangeName = exchangeName;
 		this.pi = pi;
 		server = host;
@@ -109,6 +108,8 @@ public class PiRabbitClient implements Runnable{
 	private boolean running = true;
 	
 	public void run(){
+		setUpConnection(server);
+		
 		while(running){
 			float height = pi.getLastCalculatedHeight();
 			logger.info("Got height");
