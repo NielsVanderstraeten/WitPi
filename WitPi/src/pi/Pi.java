@@ -32,6 +32,7 @@ public class Pi {
 	Pin forw4 = RaspiPin.GPIO_12;
 	Pin back4 = RaspiPin.GPIO_14;
 	private double rotation;
+	private RabbitListener listener;
 	
 	public Pi(int width, int height) throws SecurityException, IOException {
 		myDistance = new DistanceMonitor();
@@ -43,6 +44,7 @@ public class Pi {
 		setMiddelpunt(width/2, height/2);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 		client = new PiRabbitClient("localhost", "tabor", this);
+		listener = new RabbitListener("localhost", "tabor", this);
 	}
 	
 	/**
@@ -66,12 +68,14 @@ public class Pi {
 	 		//Thread photo = new Thread(new PhotoSender(port, pi));
 			Thread hm = new Thread(pi.getHeightManager());
 			Thread client = new Thread(pi.getClient());
+			Thread listener = new Thread(pi.getListener());
 			
 			//t.setDaemon(true);
 			//hm.setDaemon(true);
 			//ex.setDaemon(true);
 	 		//t.start();
 			hm.start();
+			listener.start();
 			client.start();
 			//photo.start();
 		}
@@ -79,6 +83,10 @@ public class Pi {
 			e.printStackTrace();
 		}
 	}	
+	
+	public RabbitListener getListener() {
+		return listener;
+	}
 	
 	public PiRabbitClient getClient(){
 		return client;
