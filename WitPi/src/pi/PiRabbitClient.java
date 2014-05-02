@@ -28,15 +28,16 @@ public class PiRabbitClient implements Runnable{
 //			e.printStackTrace();
 //		}
 		
-		logger = Logger.getLogger("pirabbitclientlogger");  
-		fh = new FileHandler("/rabbitclient.log");  
-        logger.addHandler(fh);
-        SimpleFormatter formatter = new SimpleFormatter();  
-        fh.setFormatter(formatter); 
+//		logger = Logger.getLogger("pirabbitclientlogger");  
+//		fh = new FileHandler("/rabbitclient.log");  
+//        logger.addHandler(fh);
+//        SimpleFormatter formatter = new SimpleFormatter();  
+//        fh.setFormatter(formatter); 
 
 		this.exchangeName = exchangeName;
 		this.pi = pi;
 		server = host;
+		setUpConnection();
 	}
 	
 	public PiRabbitClient() throws SecurityException, IOException{
@@ -55,19 +56,19 @@ public class PiRabbitClient implements Runnable{
 		try{
 			//Setting up connection
 			ConnectionFactory factory = new ConnectionFactory();
-			logger.info("Created factory");
+//			logger.info("Created factory");
 			factory.setUsername("wit");
 			factory.setPassword("wit");
-			logger.info("Set login");
+//			logger.info("Set login");
 			factory.setHost(server);
 			factory.setPort(5672);
-			logger.info("Set host + port");
+//			logger.info("Set host + port");
 			connection = factory.newConnection();
-			logger.info("Created connection");
+//			logger.info("Created connection");
 			channel = connection.createChannel();
-			logger.info("Created channel");
+//			logger.info("Created channel");
 			channel.exchangeDeclare(exchangeName, "topic");
-			logger.info("Declared exchange");
+//			logger.info("Declared exchange");
 //			//Setting up reply 
 			//Reply niet nodig, want daarvoor hebben we RabitRecv!
 //			replyQueueName = channel.queueDeclare().getQueue();
@@ -75,7 +76,7 @@ public class PiRabbitClient implements Runnable{
 //			channel.basicConsume(replyQueueName, true, consumer);
 		} catch(IOException ex){
 			System.out.println("Error in setUpConnection");
-			logger.info("Error in setup connection");
+//			logger.info("Error in setup connection");
 			ex.printStackTrace();
 		}
 	}
@@ -84,10 +85,10 @@ public class PiRabbitClient implements Runnable{
 		try{
 			//Sending the message
 			channel.basicPublish(exchangeName, topic, null, message.getBytes());
-			logger.info("Sent message");
+//			logger.info("Sent message");
 			System.out.println(topic + " " + message);
 		} catch(Exception ex){
-			logger.info("Error in sending message");
+//			logger.info("Error in sending message");
 			ex.printStackTrace();
 		}
 	}
@@ -96,32 +97,30 @@ public class PiRabbitClient implements Runnable{
 	private void closeChannel(){
 		try{
 			channel.close();
-			logger.info("Closed channel");
+//			logger.info("Closed channel");
 			connection.close();
-			logger.info("Closed connection");
+//			logger.info("Closed connection");
 		} catch(IOException ex){
 			System.out.println("Error in closeChannel");
-			logger.info("Error in closing channel");
+//			logger.info("Error in closing channel");
 		}
 	}
 	
 	private boolean running = true;
 	
-	public void run(){
-		setUpConnection();
-		
+	public void run(){		
 		while(running){
 			float height = pi.getLastCalculatedHeight();
-			logger.info("Got height");
+//			logger.info("Got height");
 			sendMessage("" + height, "wit.info.height");
-			logger.info("Sent height");
+//			logger.info("Sent height");
 			try{
 				Thread.sleep(500);
 			} catch (Exception e){
 				//PECH
 			}
 		}
-		logger.info("Exitted while loop run()");
+//		logger.info("Exitted while loop run()");
 		closeChannel();
 	}
 	
@@ -131,6 +130,7 @@ public class PiRabbitClient implements Runnable{
 	
 	public static void main(String[] args) throws Exception{
 		PiRabbitClient client = new PiRabbitClient();
+		
 		int i = 1;
 		while(i < 10){
 			client.sendMessage(i*300 + "", "wit.info.height");
