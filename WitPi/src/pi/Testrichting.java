@@ -16,7 +16,7 @@ public class Testrichting implements Runnable{
 		this.mypm = mypm;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NumberFormatException, SecurityException, IOException {
 		//int port = Integer.parseInt(args[0]);
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{

@@ -33,7 +33,7 @@ public class Pi {
 	Pin back4 = RaspiPin.GPIO_14;
 	private double rotation;
 	
-	public Pi(int width, int height) {
+	public Pi(int width, int height) throws SecurityException, IOException {
 		myDistance = new DistanceMonitor();
 		myCamera = new Camera();
 		myHeightMotor = new MotorPwm(forw1, back1);
@@ -56,7 +56,7 @@ public class Pi {
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 	}
 	
-	public static void main(String [] args)
+	public static void main(String [] args) throws NumberFormatException, SecurityException, IOException
 	{
 		int port = Integer.parseInt(args[0]);
 		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));

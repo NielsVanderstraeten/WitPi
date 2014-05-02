@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -18,8 +21,16 @@ public class RabbitListener implements Runnable{
 	private Channel channel;
 	private String queueName, exchangeName;
 	private Pi pi;
+	private Logger logger;
+	private FileHandler fh;
 	
-	public RabbitListener(String host, String exchangeName, Pi pi) {
+	public RabbitListener(String host, String exchangeName, Pi pi) throws SecurityException, IOException {
+		logger = Logger.getLogger("pirabbitlistenerlogger");  
+		fh = new FileHandler("~/rabbitlistener.log");  
+        logger.addHandler(fh);
+        SimpleFormatter formatter = new SimpleFormatter();  
+        fh.setFormatter(formatter); 
+        
 		setUpTopics();
 		setUpConnection(host, exchangeName);
 		this.pi = pi;
@@ -35,20 +46,26 @@ public class RabbitListener implements Runnable{
 			factory.setHost(host);
 			factory.setPort(5673);
 			connection = factory.newConnection();
+			logger.info("Setup connection");
 			channel = connection.createChannel();
 			
 			channel.exchangeDeclare(exchangeName, "topic");
+			logger.info("Declared channel");
 			queueName = channel.queueDeclare().getQueue();
 			
 			declareTopicBinds();
+			
+			logger.info("Declared topics");
 			
 			channel.basicQos(1);
 			consumer = new QueueingConsumer(channel);
 			channel.basicConsume(queueName, true, consumer);
 			System.out.println("[x] Awaiting RPC requests");
+			logger.info("Awaiting RPC requests");
 		}
 		catch(Exception e){
 			System.err.println("Error in TestServer constructor");
+			logger.info("Error in constructor");
 		}
 	}
 	
@@ -62,6 +79,7 @@ public class RabbitListener implements Runnable{
 				topic = ""; message = ""; delivery = null;
 				delivery = consumer.nextDelivery();
 				message = new String(delivery.getBody(),"UTF-8");
+				logger.info("Got message: " + message);
 				topic = delivery.getEnvelope().getRoutingKey();
 				
 				if(topic.equals("wit.info.position")){
@@ -94,7 +112,7 @@ public class RabbitListener implements Runnable{
 							pi.stop();
 						}
 					} else
-						System.out.println("termiante " + message);
+						System.out.println("terminate " + message);
 				} else if(topic.equals("wit.private.sendPicture")){
 					//pi.takePicture();
 					//File file = new File("picture.jpg");
@@ -121,6 +139,7 @@ public class RabbitListener implements Runnable{
 		}
 		catch(Exception e){
 			e.printStackTrace();
+			logger.info("Error in run()");
 		}
 		System.out.println("terminate");
 	}
@@ -145,7 +164,7 @@ public class RabbitListener implements Runnable{
 			channel.queueBind(queueName, exchangeName, topic);
 	}
 
-	public static void main(String[] args){
+	public static void main(String[] args) throws SecurityException, IOException{
 		RabbitListener listener = new RabbitListener("localhost", "tabor", null);
 		listener.run();
 	}
