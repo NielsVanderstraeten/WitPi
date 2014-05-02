@@ -60,7 +60,7 @@ public class PiRabbitClient implements Runnable{
 			factory.setPassword("wit");
 			logger.info("Set login");
 			factory.setHost(host);
-			factory.setPort(5673);
+			factory.setPort(5672);
 			logger.info("Set host + port");
 			connection = factory.newConnection();
 			logger.info("Created connection");

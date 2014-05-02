@@ -44,7 +44,7 @@ public class RabbitListener implements Runnable{
 			factory.setUsername("wit");
 			factory.setPassword("wit");
 			factory.setHost(host);
-			factory.setPort(5673);
+			factory.setPort(5672);
 			logger.info("Setup factory");
 			connection = factory.newConnection();
 			logger.info("Setup connection");
