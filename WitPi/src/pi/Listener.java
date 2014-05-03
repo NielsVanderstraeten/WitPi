@@ -23,7 +23,7 @@ public class Listener implements Runnable
 	private LinkedList<String> queue = new LinkedList<String>();
 	private Thread t;
 	
-	private final boolean logging = true;
+	private final boolean logging = false;
 	private Logger logger;
 	private FileHandler fh;
 
