@@ -1,5 +1,7 @@
 package pi;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,6 +13,8 @@ import java.util.Arrays;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import javax.imageio.ImageIO;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -133,30 +137,44 @@ public class RabbitListener implements Runnable{
 				} else if(topic.equals("wit.private.sendPicture")){
 					pi.takePicture();
 					File file = new File("picture.jpg");
-//					File file = new File("src/pi/photo.jpg");
-					InputStream inFile = new FileInputStream(file);
-					int size = (int) file.length();
-					byte[] buf = new byte[8192];
-					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
-					int len = 0;
-					System.out.println(size);
-					File outfile = new File("picture2.jpg");
-					OutputStream outFileStream = new FileOutputStream(file, false);
-					while ((len = inFile.read(buf)) != -1) {
-						if(len < 8192){
-							byte[] buf2 = new byte[len];
-							buf2 = Arrays.copyOfRange(buf, 0, len);
-							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
-							outFileStream.write(buf2);
-						} else{
-							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
-							outFileStream.write(buf);
-						}
-						System.out.println(len);
-					}
-					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
-					inFile.close();
-					outFileStream.close();
+					
+					//Stuur aantal bytes
+//					InputStream inFile = new FileInputStream(file);
+//					int size = (int) file.length();
+//					byte[] buf = new byte[8192];
+//					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
+					
+					//Niels: Foto naar byte[]
+					BufferedImage originalImage = ImageIO.read(file);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(originalImage, "jpg", baos);
+					byte[] pictureBytes = baos.toByteArray();
+					
+					//Niels: byte[] in 1x publishen
+					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, pictureBytes);
+					
+					//Stuur foto
+//					int len = 0;
+//					OutputStream outFileStream = new FileOutputStream(file, false);
+//					while ((len = inFile.read(buf)) != -1) {
+//						if(len < 8192){
+//							byte[] buf2 = new byte[len];
+//							buf2 = Arrays.copyOfRange(buf, 0, len);
+//							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
+//							outFileStream.write(buf2);
+//						} else{
+//							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
+//							outFileStream.write(buf);
+//						}
+//						System.out.println(len);
+//					}
+					
+					//Stuur end bericht
+//					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
+//					inFile.close();
+//					outFileStream.close();
+					
+					baos.close();
 				}
 			}
 		}
