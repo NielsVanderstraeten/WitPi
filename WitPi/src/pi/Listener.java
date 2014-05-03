@@ -50,17 +50,17 @@ public class Listener implements Runnable
 				System.out.println("Just connected to " + server.getRemoteSocketAddress());
 				if (logging)
 					logger.info("Just connected to " + server.getRemoteSocketAddress());
-				DataInputStream in = new DataInputStream(server.getInputStream());
-				String inMsg = in.readUTF();
-				if (logging)
-					logger.info("Read inMsg: " + inMsg);
+//				DataInputStream in = new DataInputStream(server.getInputStream());
+//				String inMsg = in.readUTF();
+//				if (logging)
+//					logger.info("Read inMsg: " + inMsg);
 				OutputStream out = server.getOutputStream();
 				DataOutputStream outData = new DataOutputStream(out); 
 				
 				if (logging)
 					logger.info("OutputStream initialised");
 				
-				if(inMsg.equals("takepicture")){
+//				if(inMsg.equals("takepicture")){
 					if (logging)
 						logger.info("Taking picture...");
 					pi.takePicture();
@@ -75,9 +75,9 @@ public class Listener implements Runnable
 					if (logging)
 						logger.info("Finished copy");
 					inFile.close();
-				}
-				else {
-				}
+//				}
+//				else {
+//				}
 			
 				server.close();
 			}
