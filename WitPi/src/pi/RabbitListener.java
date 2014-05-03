@@ -2,8 +2,10 @@ package pi;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.FileHandler;
@@ -134,24 +136,27 @@ public class RabbitListener implements Runnable{
 //					File file = new File("src/pi/photo.jpg");
 					InputStream inFile = new FileInputStream(file);
 					int size = (int) file.length();
-					byte[] buf = new byte[size];
+					byte[] buf = new byte[8192];
 					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
 					int len = 0;
 					System.out.println(size);
-					inFile.read(buf);
-//					while ((len = inFile.read(buf)) != -1) {
-//						if(len < 8192){
-//							byte[] buf2 = new byte[len];
-//							buf2 = Arrays.copyOfRange(buf, 0, len);
-//							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
-//						} else{
-//							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
-//						}
-//						System.out.println(len);
-//					}
-					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
+					File outfile = new File("picture2.jpg");
+					OutputStream outFileStream = new FileOutputStream(file, false);
+					while ((len = inFile.read(buf)) != -1) {
+						if(len < 8192){
+							byte[] buf2 = new byte[len];
+							buf2 = Arrays.copyOfRange(buf, 0, len);
+							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
+							outFileStream.write(buf2);
+						} else{
+							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
+							outFileStream.write(buf);
+						}
+						System.out.println(len);
+					}
 					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
 					inFile.close();
+					outFileStream.close();
 				}
 			}
 		}
