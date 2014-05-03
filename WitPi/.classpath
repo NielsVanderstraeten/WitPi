@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="C:/Users/Jeroen/Documents/KU Leuven/2013-2014/sem1/P&amp;O/Code Pi/pi4j-0.0.5/lib/pi4j-service-javadoc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Jeroen/Documents/KU Leuven/2013-2014/sem1/P&amp;O/Code Pi/pi4j-0.0.5/lib/pi4j-service-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/wout/Documents/keys/rabbitmq-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
