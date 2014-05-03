@@ -43,23 +43,23 @@ public class PositionManager {
 		System.out.println("currentPosition changed base from:" + x +", " + y + "to: " + currentPosition.getX() + ", " + currentPosition.getY());
 	}
 		
-	//1 = links, 2 = rechts, 0 = blijf
+	//1 = vooruit, -1 = achteruit, 0 = blijf
 	private int horizontalMovement() {
-		if (currentPosition.getX() > targetPosition.getX() + 200)
+		if (targetPosition.getX() - currentPosition.getX() > 100)
 			return 1;
-		else if (currentPosition.getX() < targetPosition.getX() - 200)
-			return 2;
+		else if (targetPosition.getX() - currentPosition.getX() < -100)
+			return -1;
 		else
 			return 0;
 		//draaien
 	}
 	
-	//1 = omhoog, 2 = omlaag, 0 = blijf
+	//1 = rechts, 2 = links, 0 = blijf
 	private int verticalMovement() {
-		if (currentPosition.getY() > targetPosition.getY() + 200)
+		if (targetPosition.getY() - currentPosition.getY() > 100)
 			return 1;
-		else if (currentPosition.getY() < targetPosition.getY() - 200)
-			return 2;
+		else if (targetPosition.getY() - currentPosition.getY() < -100)
+			return -1;
 		else
 			return 0;
 	}
@@ -70,24 +70,25 @@ public class PositionManager {
 	
 	private void activateHorizontalMotor() {
 		if (horizontalMovement() == 1) {
-			//beweeg links (motor)
-			pi.right(rightTime);
-			System.out.println("Achteruit");
-		} else {
-			//beweeg rechts (motor)
-			pi.left(leftTime);
+			//beweeg vooruit (motor)
+			pi.forward(forwardTime);
 			System.out.println("Vooruit");
-		}		
+		} else if (horizontalMovement() == -1){
+			//beweeg achteruit (motor)
+			pi.backward(backwardTime);
+			System.out.println("Achteruit");
+		} else
+			;
 	}
 	
 	private void activateVerticalMotor() {
 		if (verticalMovement() == 1) {
-			//beweeg omhoog (motor)
-			pi.forward(forwardTime);
+			//beweeg rechts (motor)
+			pi.right(rightTime);
 			System.out.println("Rechts");
-		} else {
-			//beweeg omlaag (motor)
-			pi.backward(backwardTime);
+		} else if (verticalMovement() == -1){
+			//beweeg links (motor)
+			pi.left(leftTime);
 			System.out.println("Links");
 		}		
 	}
@@ -95,35 +96,13 @@ public class PositionManager {
 	public void moveToNextPosition() {			
 
 		if (! isAtCorrectPosition()) {
-			Vector middelpunt = pi.getMiddelpunt();
-
-			boolean juisteXAs = (horizontalMovement() == 0);
-			boolean juisteYAs = (verticalMovement() == 0);
-
-			if (juisteXAs) {
-				//Beweeg enkel nog op de y-as
-				activateVerticalMotor();
-			} else if (juisteYAs) {
-				//Beweeg enkel nog op de x-as
-				activateHorizontalMotor();
-			} else {
-				//Beweeg in richting die het dichts bij middelpunt ligt.
-				double horDistance = calculateHorizontalDistanceToMid(middelpunt);			
-				double verDistance = calculateVerticalDistanceToMid(middelpunt);
-
-				if (horDistance < verDistance) {
-					//Beweeg de zeppelin horizontaal
-					activateHorizontalMotor();
-					activateVerticalMotor();
-				} else {
-					//Beweeg de zeppelin verticaal
-					activateVerticalMotor();
-					activateHorizontalMotor();
-				}
-			}	
-		}
+			activateHorizontalMotor();
+			activateVerticalMotor();
+		}	
+	
 	}
 
+	@Deprecated
 	private double calculateHorizontalDistanceToMid(Vector middelpunt) {
 		if (horizontalMovement() == 1) { //Richting links
 			return middelpunt.getDistance(new Vector(currentPosition.getX() - 100, currentPosition.getY()));
@@ -131,7 +110,8 @@ public class PositionManager {
 			return middelpunt.getDistance(new Vector(currentPosition.getX() + 100, currentPosition.getY()));
 		}
 	}
-
+	
+	@Deprecated
 	private double calculateVerticalDistanceToMid(Vector middelpunt) {
 		if (verticalMovement() == 1) { //Richting omhoog
 			return middelpunt.getDistance(new Vector(currentPosition.getX(), currentPosition.getY() - 100));

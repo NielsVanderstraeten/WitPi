@@ -1,7 +1,6 @@
 package pi;
 
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Testrichting implements Runnable{
@@ -16,10 +15,10 @@ public class Testrichting implements Runnable{
 		this.mypm = mypm;
 	}
 	
-	public static void main(String[] args) throws NumberFormatException, SecurityException, IOException {
+	public static void main(String[] args) {
 		//int port = Integer.parseInt(args[0]);
-		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 		try{
+			Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]), false);
 	 		Thread t = new Thread(new Testrichting(pi, pi.getMyPositionManager()));
 			//Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);
@@ -36,13 +35,18 @@ public class Testrichting implements Runnable{
 	@Override
 	public synchronized void run() {
 			while (true) {
-				System.out.println("setForward:");
+				System.out.println("Vooruit:");
 				int inputx = reader1.nextInt();
-				System.out.println("setBackward:");
-				int inputy = reader1.nextInt();
-				pi.setTargetPosition(inputx, inputy);
 				pi.forward(inputx);
-				pi.left(inputy);
+				System.out.println("Achteruit:");
+				inputx = reader1.nextInt();
+				pi.backward(inputx);
+				System.out.println("Rechts:");
+				inputx = reader1.nextInt();
+				pi.right(inputx);
+				System.out.println("Links:");
+				inputx = reader1.nextInt();
+				pi.left(inputx);
 			}
 	}
 }
