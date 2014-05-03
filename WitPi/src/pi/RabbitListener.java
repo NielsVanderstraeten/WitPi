@@ -129,9 +129,9 @@ public class RabbitListener implements Runnable{
 					} else
 						System.out.println("terminate " + message);
 				} else if(topic.equals("wit.private.sendPicture")){
-					//pi.takePicture();
-					//File file = new File("picture.jpg");
-					File file = new File("src/pi/photo.jpg");
+					pi.takePicture();
+					File file = new File("picture.jpg");
+//					File file = new File("src/pi/photo.jpg");
 					InputStream inFile = new FileInputStream(file);
 					long size = file.length();
 					byte[] buf = new byte[8192];
