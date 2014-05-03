@@ -18,7 +18,7 @@ public class Testrichting implements Runnable{
 	public static void main(String[] args) {
 		//int port = Integer.parseInt(args[0]);
 		try{
-			Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+			Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]), false);
 	 		Thread t = new Thread(new Testrichting(pi, pi.getMyPositionManager()));
 			//Thread hm = new Thread(pi.getHeightManager());
 			//t.setDaemon(true);

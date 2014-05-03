@@ -56,6 +56,10 @@ public class Pi {
 	public Pi(int width, int height, boolean test){
 		setMiddelpunt(width/2, height/2);
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
+		if(!test){
+			myFrontMotor = new MotorFixed(forw4, back4);
+			mySideMotor = new MotorFixed(forw2, back2);
+		}
 	}
 	
 	public static void main(String [] args) throws NumberFormatException, SecurityException, IOException
