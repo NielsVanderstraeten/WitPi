@@ -148,6 +148,7 @@ public class RabbitListener implements Runnable{
 						}
 						System.out.println(len);
 					}
+					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
 					inFile.close();
 				}
 			}
