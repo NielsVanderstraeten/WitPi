@@ -33,6 +33,7 @@ public class Pi {
 	Pin back4 = RaspiPin.GPIO_14;
 	private double rotation;
 	private RabbitListener listener;
+	private Thread hmThread, clientThread, listenerThread;
 	
 	public Pi(int width, int height) throws SecurityException, IOException {
 		myDistance = new DistanceMonitor();
@@ -45,6 +46,12 @@ public class Pi {
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 		listener = new RabbitListener("localhost", "server", this);
 		client = new PiRabbitClient("localhost", "server", this);
+		hmThread = new Thread(this.getHeightManager());
+		clientThread = new Thread(this.getClient());
+		listenerThread = new Thread(this.getListener());
+		hmThread.start();
+		listenerThread.start();
+		clientThread.start();
 	}
 	
 	/**
@@ -61,27 +68,7 @@ public class Pi {
 	public static void main(String [] args) throws NumberFormatException, SecurityException, IOException
 	{
 		int port = Integer.parseInt(args[0]);
-		Pi pi = new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-		try{
-			// listener moet weg, vervangen door photo en client
-	 		//Thread t = new Thread(new Listener(port, pi));
-	 		//Thread photo = new Thread(new PhotoSender(port, pi));
-			Thread hm = new Thread(pi.getHeightManager());
-			Thread client = new Thread(pi.getClient());
-			Thread listener = new Thread(pi.getListener());
-			
-			//t.setDaemon(true);
-			//hm.setDaemon(true);
-			//ex.setDaemon(true);
-	 		//t.start();
-			hm.start();
-			listener.start();
-			client.start();
-			//photo.start();
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
+		new Pi(Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 	}	
 	
 	public RabbitListener getListener() {
@@ -116,6 +103,10 @@ public class Pi {
 		myFrontMotor.triggerBackwardOff();
 		mySideMotor.triggerBackwardOff();
 		mySideMotor.triggerForwardOff();
+		myHeightManager.stopRunning();
+		client.stopRunning();
+		listener.stopRunning();
+		System.exit(0);
 	}
 	
 	public void forwardStart(){

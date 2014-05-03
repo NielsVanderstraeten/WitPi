@@ -24,7 +24,7 @@ public class RabbitListener implements Runnable{
 	private String host;
 	private Logger logger;
 	private FileHandler fh;
-	private final boolean logging = true;
+	private final boolean logging = false;
 
 	public RabbitListener(String host, String exchangeName, Pi pi) throws SecurityException, IOException {
 		if (logging) {
