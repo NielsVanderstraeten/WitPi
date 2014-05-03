@@ -1,10 +1,19 @@
 package pi;
 
-import java.net.*;
-import java.util.Arrays;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.LinkedList;
-import java.util.List;
-import java.io.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class Listener implements Runnable
 {
@@ -13,6 +22,10 @@ public class Listener implements Runnable
 	private boolean listening;
 	private LinkedList<String> queue = new LinkedList<String>();
 	private Thread t;
+	
+	private final boolean logging = true;
+	private Logger logger;
+	private FileHandler fh;
 
 	public Listener(int port, Pi pi) throws IOException
 	{
@@ -20,6 +33,14 @@ public class Listener implements Runnable
 		serverSocket = new ServerSocket(port);
 		//serverSocket.setSoTimeout(10000);
 		listening = true;
+		
+		if (logging) {
+			logger = Logger.getLogger("photoclientlogger");  
+			fh = new FileHandler("/photoclient.log");  
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();  
+			fh.setFormatter(formatter); 
+		}
 	}
 	public synchronized void run(){
 		while(listening){
@@ -27,15 +48,32 @@ public class Listener implements Runnable
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
 				System.out.println("Just connected to " + server.getRemoteSocketAddress());
+				if (logging)
+					logger.info("Just connected to " + server.getRemoteSocketAddress());
 				DataInputStream in = new DataInputStream(server.getInputStream());
 				String inMsg = in.readUTF();
+				if (logging)
+					logger.info("Read inMsg: " + inMsg);
 				OutputStream out = server.getOutputStream();
 				DataOutputStream outData = new DataOutputStream(out); 
+				
+				if (logging)
+					logger.info("OutputStream initialised");
+				
 				if(inMsg.equals("takepicture")){
+					if (logging)
+						logger.info("Taking picture...");
 					pi.takePicture();
+					
+					if (logging)
+						logger.info("Taken picture.");
 					File file = new File("picture.jpg");
-					InputStream inFile = new FileInputStream(file);                        
+					InputStream inFile = new FileInputStream(file);  
+					if (logging)
+						logger.info("Starting copy");
 					copy(inFile, out);
+					if (logging)
+						logger.info("Finished copy");
 					inFile.close();
 				}
 				else {
@@ -45,9 +83,13 @@ public class Listener implements Runnable
 			}
 			catch(SocketTimeoutException s){
 				System.out.println("Socket timed out!");
+				if (logging)
+					logger.info("Socket timed out!");
 				break;
 			}
 			catch(IOException e){
+				if (logging)
+					logger.info("IOException");
 				e.printStackTrace();
 				break;
 			}
