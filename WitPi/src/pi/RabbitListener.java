@@ -139,42 +139,42 @@ public class RabbitListener implements Runnable{
 					File file = new File("picture.jpg");
 					
 					//Stuur aantal bytes
-//					InputStream inFile = new FileInputStream(file);
+					InputStream inFile = new FileInputStream(file);
 //					int size = (int) file.length();
-//					byte[] buf = new byte[8192];
+					byte[] buf = new byte[8192];
 //					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
 					
 					//Niels: Foto naar byte[]
-					BufferedImage originalImage = ImageIO.read(file);
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ImageIO.write(originalImage, "jpg", baos);
-					byte[] pictureBytes = baos.toByteArray();
+//					BufferedImage originalImage = ImageIO.read(file);
+//					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//					ImageIO.write(originalImage, "jpg", baos);
+//					byte[] pictureBytes = baos.toByteArray();
 					
 					//Niels: byte[] in 1x publishen
-					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, pictureBytes);
+//					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, pictureBytes);
 					
 					//Stuur foto
-//					int len = 0;
-//					OutputStream outFileStream = new FileOutputStream(file, false);
-//					while ((len = inFile.read(buf)) != -1) {
-//						if(len < 8192){
-//							byte[] buf2 = new byte[len];
-//							buf2 = Arrays.copyOfRange(buf, 0, len);
-//							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
-//							outFileStream.write(buf2);
-//						} else{
-//							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
-//							outFileStream.write(buf);
-//						}
-//						System.out.println(len);
-//					}
+					int len = 0;
+					OutputStream outFileStream = new FileOutputStream(file, false);
+					while ((len = inFile.read(buf)) != -1) {
+						if(len < 8192){
+							byte[] buf2 = new byte[len];
+							buf2 = Arrays.copyOfRange(buf, 0, len);
+							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
+							outFileStream.write(buf2);
+						} else{
+							//channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
+							outFileStream.write(buf);
+						}
+						System.out.println(len);
+					}
 					
 					//Stuur end bericht
-//					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
-//					inFile.close();
-//					outFileStream.close();
+					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
+					inFile.close();
+					outFileStream.close();
 					
-					baos.close();
+//					baos.close();
 				}
 			}
 		}
