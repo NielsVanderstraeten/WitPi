@@ -133,21 +133,23 @@ public class RabbitListener implements Runnable{
 					File file = new File("picture.jpg");
 //					File file = new File("src/pi/photo.jpg");
 					InputStream inFile = new FileInputStream(file);
-					long size = file.length();
-					byte[] buf = new byte[8192];
+					int size = (int) file.length();
+					byte[] buf = new byte[size];
 					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, (""+size).getBytes());
 					int len = 0;
 					System.out.println(size);
-					while ((len = inFile.read(buf)) != -1) {
-						if(len < 8192){
-							byte[] buf2 = new byte[len];
-							buf2 = Arrays.copyOfRange(buf, 0, len);
-							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
-						} else{
-							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
-						}
-						System.out.println(len);
-					}
+					inFile.read(buf);
+//					while ((len = inFile.read(buf)) != -1) {
+//						if(len < 8192){
+//							byte[] buf2 = new byte[len];
+//							buf2 = Arrays.copyOfRange(buf, 0, len);
+//							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf2);
+//						} else{
+//							channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
+//						}
+//						System.out.println(len);
+//					}
+					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, buf);
 					channel.basicPublish(exchangeName, "wit.private.recvPicture", null, "end".getBytes());
 					inFile.close();
 				}
