@@ -34,6 +34,8 @@ public class Pi {
 	private double rotation;
 	private RabbitListener listener;
 	private Thread hmThread, clientThread, listenerThread;
+	private Listener photoListener;
+	private Thread photoListenerThread;
 	
 	public Pi(int width, int height) throws SecurityException, IOException {
 		myDistance = new DistanceMonitor();
@@ -41,17 +43,24 @@ public class Pi {
 		myHeightMotor = new MotorPwm(forw1, back1);
 		myFrontMotor = new MotorFixed(forw4, back4);
 		mySideMotor = new MotorFixed(forw2, back2);
-		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
 		setMiddelpunt(width/2, height/2);
+		
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
+		
+		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
 		listener = new RabbitListener("localhost", "server", this);
 		client = new PiRabbitClient("localhost", "server", this);
+		photoListener = new Listener(6066, this);
+		
 		hmThread = new Thread(this.getHeightManager());
 		clientThread = new Thread(this.getClient());
 		listenerThread = new Thread(this.getListener());
+		photoListenerThread = new Thread(photoListener);
+		
 		hmThread.start();
 		listenerThread.start();
 		clientThread.start();
+		photoListenerThread.start();
 	}
 	
 	/**
@@ -105,6 +114,7 @@ public class Pi {
 		myHeightManager.stopRunning();
 		client.stopRunning();
 		listener.stopRunning();
+		photoListener.stopListening();
 		System.exit(0);
 	}
 	
