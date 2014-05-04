@@ -109,7 +109,7 @@ public class RabbitListener implements Runnable{
 						if(pi != null)
 							pi.setPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
 						else
-							System.out.println("position " + words[0] + ", " + words[1]);
+							System.out.println("position " + words[0] + " " + words[1]);
 					}
 				} else if(topic.equals("wit.private.rotation")){
 					pi.setRotation(Double.parseDouble(message));
@@ -190,11 +190,12 @@ public class RabbitListener implements Runnable{
 
 	private void setUpTopics(){
 		topics = new ArrayList<String>();
-		topics.add("wit.info.position");
+		topics.add("wit.info.location");
 		topics.add("wit.hcommand.elevate");
 		topics.add("wit.hcommand.move");
 		topics.add("wit.private.terminate");
 		topics.add("wit.private.sendPicture");
+		topics.add("wit.private.rotation");
 	}
 
 	public void stopRunning(){
