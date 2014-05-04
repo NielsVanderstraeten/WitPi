@@ -177,6 +177,7 @@ public class Pi {
 	
 	public void setPosition(int newXPos, int newYPos) {
 		myPositionManager.setCurrentPosition(new Vector(newXPos, newYPos));
+		myPositionManager.moveToNextPosition();
 	}
 	
 	public void setTargetPosition(int xPos, int yPos){ 
