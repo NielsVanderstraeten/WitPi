@@ -71,10 +71,11 @@ public class Listener implements Runnable
 					InputStream inFile = new FileInputStream(file);  
 					if (logging)
 						logger.info("Starting copy");
-					copy(inFile, out);
+					copy(inFile, outData);
 					if (logging)
 						logger.info("Finished copy");
 					inFile.close();
+					outData.close();
 //				}
 //				else {
 //				}
