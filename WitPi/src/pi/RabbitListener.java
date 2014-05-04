@@ -105,18 +105,18 @@ public class RabbitListener implements Runnable{
 
 				if(topic.equals("wit.info.position")){
 					String[] words = message.split("[ ]+");
-					if(words.length == 2){
+					if(words.length >= 2){
 						if(pi != null)
 							pi.setPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
 						else
 							System.out.println("position " + words[0] + ", " + words[1]);
 					}
 				} else if(topic.equals("wit.private.rotation")){
-					pi.setRotation(Integer.parseInt(message));
+					pi.setRotation(Double.parseDouble(message));
 				} else if(topic.equals("wit.hcommand.move")){
 					String[] words = message.split("[ ]+");
 					if(pi != null){
-						if(words.length == 2){
+						if(words.length >= 2){
 							pi.setTargetPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
 						}
 					} else
