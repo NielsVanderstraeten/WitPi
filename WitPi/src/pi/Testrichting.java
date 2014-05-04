@@ -35,20 +35,12 @@ public class Testrichting implements Runnable{
 	@Override
 	public synchronized void run() {
 		
-		pi.takePicture();
-//			while (true) {
-//				System.out.println("Vooruit:");
-//				int inputx = reader1.nextInt();
-//				pi.forward(inputx);
-//				System.out.println("Achteruit:");
-//				inputx = reader1.nextInt();
-//				pi.backward(inputx);
-//				System.out.println("Rechts:");
-//				inputx = reader1.nextInt();
-//				pi.right(inputx);
-//				System.out.println("Links:");
-//				inputx = reader1.nextInt();
-//				pi.left(inputx);
-//			}
+//		pi.takePicture();
+			while (true) {
+				pi.forward(2000);
+				pi.backward(2000);
+				pi.right(2000);
+				pi.left(2000);
+			}
 	}
 }
