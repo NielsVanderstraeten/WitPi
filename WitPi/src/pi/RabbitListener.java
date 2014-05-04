@@ -103,7 +103,7 @@ public class RabbitListener implements Runnable{
 					logger.info("Got message: " + topic);
 				topic = delivery.getEnvelope().getRoutingKey();
 
-				if(topic.equals("wit.info.position")){
+				if(topic.equals("wit.info.location")){
 					String[] words = message.split("[ ]+");
 					if(words.length >= 2){
 						if(pi != null)
