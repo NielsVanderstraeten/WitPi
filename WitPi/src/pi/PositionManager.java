@@ -1,8 +1,10 @@
 package pi;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class PositionManager {
 	
@@ -17,11 +19,23 @@ public class PositionManager {
 	private ArrayList<Vector> positions = new ArrayList<Vector>();
 	private Pi pi;
 	
-	public PositionManager(Vector currentPosition, Pi pi){
+	private Logger logger;
+	private FileHandler fh;
+	private final boolean logging = true;
+	
+	public PositionManager(Vector currentPosition, Pi pi) throws SecurityException, IOException{
 		this.pi = pi;
 		realTarget = pi.getMiddelpunt();
 		setCurrentPosition(currentPosition);
 		positions.add(currentPosition);
+		
+		if (logging) {
+			logger = Logger.getLogger("positionlogger");  
+			fh = new FileHandler("/positionmanager.log");  
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();  
+			fh.setFormatter(formatter); 
+		}
 	}
 	
 	public void setTargetPosition(Vector newTargetPos){
@@ -41,6 +55,11 @@ public class PositionManager {
 
 		System.out.println("targetPosition changed base from:" + tarX +", " + tarY + "to: " + targetPosition.getX() + ", " + targetPosition.getY());
 		System.out.println("currentPosition changed base from:" + x +", " + y + "to: " + currentPosition.getX() + ", " + currentPosition.getY());
+		
+		if (logging) {
+			logger.info("targetPosition changed base from:" + tarX +", " + tarY + "to: " + targetPosition.getX() + ", " + targetPosition.getY());
+			logger.info("currentPosition changed base from:" + x +", " + y + "to: " + currentPosition.getX() + ", " + currentPosition.getY());
+		}
 	}
 		
 	//1 = vooruit, -1 = achteruit, 0 = blijf
@@ -65,6 +84,10 @@ public class PositionManager {
 	}
 	
 	public boolean isAtCorrectPosition() {
+		if (logging) {
+			logger.info("isAtCorrectPosition, vertmov: " + verticalMovement());
+			logger.info("isAtCorrectPosition, hormov: " + horizontalMovement());
+		}
 		return (verticalMovement() == 0 && horizontalMovement() == 0);
 	}
 	
