@@ -24,11 +24,6 @@ public class PositionManager {
 	private final boolean logging = true;
 	
 	public PositionManager(Vector currentPosition, Pi pi) throws SecurityException, IOException{
-		this.pi = pi;
-		realTarget = pi.getMiddelpunt();
-		setCurrentPosition(currentPosition);
-		positions.add(currentPosition);
-		
 		if (logging) {
 			logger = Logger.getLogger("positionlogger");  
 			fh = new FileHandler("/positionmanager.log");  
@@ -36,6 +31,11 @@ public class PositionManager {
 			SimpleFormatter formatter = new SimpleFormatter();  
 			fh.setFormatter(formatter); 
 		}
+		
+		this.pi = pi;
+		realTarget = pi.getMiddelpunt();
+		setCurrentPosition(currentPosition);
+		positions.add(currentPosition);
 	}
 	
 	public void setTargetPosition(Vector newTargetPos){
