@@ -8,10 +8,10 @@ import java.util.logging.SimpleFormatter;
 
 public class PositionManager {
 	
-	int leftTime = 500;
-	int rightTime = 1500;
-	int forwardTime = 500;
-	int backwardTime = 1500;
+	int leftTime = 600;
+	int rightTime = 1800;
+	int forwardTime = 600;
+	int backwardTime = 1800;
 	
 	private Vector targetPosition;
 	private Vector currentPosition;
