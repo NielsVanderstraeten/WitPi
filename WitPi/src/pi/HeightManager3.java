@@ -27,7 +27,7 @@ public class HeightManager3 implements Runnable {
 		this.direction = 0;
 		this.error = new double[10];
 		this.accumulator = 0;
-		setTargetHeight(80);
+		setTargetHeight(100);
 	}
 	
 	private double pTerm = 2;
