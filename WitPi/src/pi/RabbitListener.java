@@ -109,10 +109,13 @@ public class RabbitListener implements Runnable{
 						if(pi != null)
 							pi.setPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
 						else
-							System.out.println("position " + words[0] + " " + words[1]);
+							System.out.println("position " + (2*Integer.parseInt(words[0])) + " " + words[1]);
 					}
 				} else if(topic.equals("wit.private.rotation")){
-					pi.setRotation(Double.parseDouble(message));
+					if(pi != null)
+						pi.setRotation(Double.parseDouble(message));
+					else
+						System.out.println("Rotation "+ (2*Double.parseDouble(message)));
 				} else if(topic.equals("wit.hcommand.move")){
 					String[] words = message.split(",");
 					if(pi != null){
@@ -120,7 +123,7 @@ public class RabbitListener implements Runnable{
 							pi.setTargetPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
 						}
 					} else
-						System.out.println("move " + words[0] + ", " + words[1]);
+						System.out.println("move " + words[0] + " " + words[1]);
 				} else if(topic.equals("wit.hcommand.elevate")){
 					if(pi !=null)
 						pi.goToHeight(Integer.parseInt(message));

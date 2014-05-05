@@ -73,7 +73,12 @@ public class Pi {
 	 * @param test
 	 */
 	public Pi(int width, int height, boolean test){
-		myCamera = new Camera();
+		try{
+			setMiddelpunt(width/2, height/2);
+			myPositionManager = new PositionManager(new Vector(-1, -1), this);
+		} catch(Exception e){
+			//fuck this
+		}
 	}
 	
 	public static void main(String [] args) throws NumberFormatException, SecurityException, IOException

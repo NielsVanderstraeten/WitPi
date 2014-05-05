@@ -43,9 +43,8 @@ public class TestPosition implements Runnable{
 				int curry = reader1.nextInt();
 				System.out.println("setCurrentRotation:");
 				double rotation = reader1.nextDouble();
-				pi.setRotation(rotation);
 				pi.setPosition(currx, curry);
-				mypm.moveToNextPosition();
+				pi.setRotation(rotation);
 			}		
 	}
 }

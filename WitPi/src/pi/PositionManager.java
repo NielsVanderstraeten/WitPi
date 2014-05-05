@@ -21,7 +21,7 @@ public class PositionManager {
 	
 	private Logger logger;
 	private FileHandler fh;
-	private final boolean logging = false;
+	private final boolean logging = true;
 	
 	public PositionManager(Vector currentPosition, Pi pi) throws SecurityException, IOException{
 		if (logging) {
@@ -64,6 +64,7 @@ public class PositionManager {
 		
 	//1 = vooruit, -1 = achteruit, 0 = blijf
 	private int horizontalMovement() {
+		System.out.println("HorzMove: " + (targetPosition.getY() - currentPosition.getY()) + "");
 		if (targetPosition.getX() - currentPosition.getX() > 500)
 			return 1;
 		else if (targetPosition.getX() - currentPosition.getX() < -500)
@@ -75,6 +76,7 @@ public class PositionManager {
 	
 	//1 = rechts, 2 = links, 0 = blijf
 	private int verticalMovement() {
+		System.out.println("VertMove: " + (targetPosition.getY() - currentPosition.getY()));
 		if (targetPosition.getY() - currentPosition.getY() > 500)
 			return 1;
 		else if (targetPosition.getY() - currentPosition.getY() < -500)
@@ -88,6 +90,7 @@ public class PositionManager {
 			logger.info("isAtCorrectPosition, vertmov: " + verticalMovement());
 			logger.info("isAtCorrectPosition, hormov: " + horizontalMovement());
 		}
+		
 		return (verticalMovement() == 0 && horizontalMovement() == 0);
 	}
 	
@@ -119,6 +122,10 @@ public class PositionManager {
 	public void moveToNextPosition() {			
 
 		if (! isAtCorrectPosition()) {
+			if(logging){
+				logger.info("moveToNextPos: horizontal: "+ horizontalMovement());
+				logger.info("moveToNextPos: Vertical: "+ verticalMovement());
+			}
 			activateHorizontalMotor();
 			activateVerticalMotor();
 		}	
