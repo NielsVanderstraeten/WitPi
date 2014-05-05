@@ -130,7 +130,7 @@ public class RabbitListener implements Runnable{
 						System.out.println("move " + words[0] + " " + words[1]);
 				} else if(topic.equals("wit.hcommand.elevate")){
 					if(pi !=null)
-						pi.goToHeight(Integer.parseInt(message));
+						pi.goToHeight(Double.parseDouble(message)/10);
 					else
 						System.out.println("elevate " + message);
 				}else if(topic.equals("wit.private.terminate")){
