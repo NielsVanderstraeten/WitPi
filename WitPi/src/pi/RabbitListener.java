@@ -104,7 +104,7 @@ public class RabbitListener implements Runnable{
 				topic = delivery.getEnvelope().getRoutingKey();
 
 				if(topic.equals("wit.info.location")){
-					String[] words = message.split("[ ]+");
+					String[] words = message.split(",");
 					if(words.length >= 2){
 						if(pi != null)
 							pi.setPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
@@ -114,7 +114,7 @@ public class RabbitListener implements Runnable{
 				} else if(topic.equals("wit.private.rotation")){
 					pi.setRotation(Double.parseDouble(message));
 				} else if(topic.equals("wit.hcommand.move")){
-					String[] words = message.split("[ ]+");
+					String[] words = message.split(",");
 					if(pi != null){
 						if(words.length >= 2){
 							pi.setTargetPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
