@@ -30,7 +30,7 @@ public class RabbitListener implements Runnable{
 	private String host;
 	private Logger logger;
 	private FileHandler fh;
-	private final boolean logging = false;
+	private final boolean logging = true;
 
 	public RabbitListener(String host, String exchangeName, Pi pi) throws SecurityException, IOException {
 		if (logging) {
@@ -105,6 +105,8 @@ public class RabbitListener implements Runnable{
 
 				if(topic.equals("wit.info.location")){
 					String[] words = message.split(",");
+					if (logging)
+						logger.info("Got location: " + words.toString());
 					if(words.length >= 2){
 						if(pi != null)
 							pi.setPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));
@@ -118,6 +120,8 @@ public class RabbitListener implements Runnable{
 						System.out.println("Rotation "+ (Double.parseDouble(message)));
 				} else if(topic.equals("wit.hcommand.move")){
 					String[] words = message.split(",");
+					if (logging)
+						logger.info("Got hcommand: " + words.toString());
 					if(pi != null){
 						if(words.length >= 2){
 							pi.setTargetPosition(Integer.parseInt(words[0]), Integer.parseInt(words[1]));

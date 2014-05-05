@@ -1,6 +1,9 @@
 package pi;
 
 import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.RaspiPin;
@@ -40,7 +43,19 @@ public class Pi {
 	private Listener photoListener;
 	private Thread photoListenerThread;
 	
+	private final boolean logging = true;
+	private Logger logger;
+	private FileHandler fh;
+	
 	public Pi(int width, int height) throws SecurityException, IOException {
+		if (logging) {
+			logger = Logger.getLogger("positionlogger");  
+			fh = new FileHandler("/positionmanager.log");  
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();  
+			fh.setFormatter(formatter); 
+		}
+		
 		myDistance = new DistanceMonitor();
 		myCamera = new Camera();
 		myHeightMotor = new MotorPwm(forw1, back1);
@@ -48,6 +63,8 @@ public class Pi {
 		mySideMotor = new MotorFixed(forw2, back2);
 		setMiddelpunt(width/2, height/2);
 		
+		if (logging)
+			logger.info("Creating PositionManager");
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 		
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
@@ -184,10 +201,14 @@ public class Pi {
 	}
 	
 	public void setPosition(int newXPos, int newYPos) {
+		if (logging)
+			logger.info("Setting position in Pi");
 		myPositionManager.setCurrentPosition(new Vector(newXPos, newYPos));
 	}
 	
 	public void setTargetPosition(int xPos, int yPos){ 
+		if (logging)
+			logger.info("Setting target position in Pi");
 		myPositionManager.setTargetPosition(new Vector(xPos, yPos));
 	}
 	
