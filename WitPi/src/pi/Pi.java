@@ -43,7 +43,7 @@ public class Pi {
 	private Listener photoListener;
 	private Thread photoListenerThread;
 	
-	private final boolean logging = true;
+	private final boolean logging = false;
 	private Logger logger;
 	private FileHandler fh;
 	
