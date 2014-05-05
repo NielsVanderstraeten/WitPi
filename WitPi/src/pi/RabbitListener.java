@@ -99,9 +99,9 @@ public class RabbitListener implements Runnable{
 				topic = ""; message = ""; delivery = null;
 				delivery = consumer.nextDelivery();
 				message = new String(delivery.getBody(),"UTF-8");
+				topic = delivery.getEnvelope().getRoutingKey();
 				if (logging)
 					logger.info("Got message: " + topic);
-				topic = delivery.getEnvelope().getRoutingKey();
 
 				if(topic.equals("wit.info.location")){
 					String[] words = message.split(",");
