@@ -16,6 +16,9 @@ public class Pi {
 	final double maxPower = 1024;
 	final double minPower = 824;
 	private PiRabbitClient client;
+	private String host = "localhost";
+	//private String host = "192.168.2.134";
+	private String serverName = "server";
 	
 	private Vector middelpunt;
 	
@@ -48,8 +51,8 @@ public class Pi {
 		myPositionManager = new PositionManager(new Vector(-1, -1), this);
 		
 		myHeightManager = new HeightManager3(myHeightMotor, myDistance, minPower, maxPower);
-		listener = new RabbitListener("localhost", "server", this);
-		client = new PiRabbitClient("localhost", "server", this);
+		listener = new RabbitListener(host, serverName, this);
+		client = new PiRabbitClient(host, serverName, this);
 		photoListener = new Listener(6066, this);
 		
 		hmThread = new Thread(this.getHeightManager());

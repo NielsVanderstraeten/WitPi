@@ -15,7 +15,7 @@ public class PiRabbitClient implements Runnable{
 	private Connection connection;
 	private Channel channel;
 	private int port;
-	private String server;
+	private String host;
 	private Pi pi;
 	private Logger logger;
 	private FileHandler fh;
@@ -39,7 +39,7 @@ public class PiRabbitClient implements Runnable{
 
 		this.exchangeName = exchangeName;
 		this.pi = pi;
-		server = host;
+		this.host = host;
 		setUpConnection();
 	}
 
@@ -52,7 +52,7 @@ public class PiRabbitClient implements Runnable{
 	}
 
 	public String getServerName(){
-		return server;
+		return host;
 	}
 
 	private void setUpConnection(){
@@ -61,7 +61,7 @@ public class PiRabbitClient implements Runnable{
 			ConnectionFactory factory = new ConnectionFactory();
 			factory.setUsername("wit");
 			factory.setPassword("wit");
-			factory.setHost(server);
+			factory.setHost(host);
 			factory.setPort(5672);
 			if (logging)
 				logger.info("Setup Client factory");
