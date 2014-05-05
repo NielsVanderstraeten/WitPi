@@ -264,6 +264,7 @@ public class Pi {
 
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
+		myPositionManager.updateRotation();
 		myPositionManager.moveToNextPosition();
 	}
 	

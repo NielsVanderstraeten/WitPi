@@ -61,6 +61,17 @@ public class PositionManager {
 			logger.info("currentPosition changed base from:" + x +", " + y + "to: " + currentPosition.getX() + ", " + currentPosition.getY());
 		}
 	}
+	
+	public void updateRotation(){
+		double rotation = pi.getRotation();
+		double x = realCurrent.getX();
+		double y = realCurrent.getY();
+		double tarX = realTarget.getX();
+		double tarY = realTarget.getY();
+		
+		targetPosition = changeBase(tarX,tarY,rotation);
+		currentPosition = changeBase(x,y,rotation);
+	}
 		
 	//1 = vooruit, -1 = achteruit, 0 = blijf
 	private int horizontalMovement() {
