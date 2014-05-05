@@ -36,11 +36,11 @@ public class Testrichting implements Runnable{
 	public synchronized void run() {
 		
 //		pi.takePicture();
-			while (true) {
+			//while (true) {
 				pi.forward(2000);
 				pi.backward(2000);
 				pi.right(2000);
 				pi.left(2000);
-			}
+			//}
 	}
 }

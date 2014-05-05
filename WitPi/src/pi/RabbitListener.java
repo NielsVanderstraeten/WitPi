@@ -115,7 +115,7 @@ public class RabbitListener implements Runnable{
 					if(pi != null)
 						pi.setRotation(Double.parseDouble(message));
 					else
-						System.out.println("Rotation "+ (2*Double.parseDouble(message)));
+						System.out.println("Rotation "+ (Double.parseDouble(message)));
 				} else if(topic.equals("wit.hcommand.move")){
 					String[] words = message.split(",");
 					if(pi != null){

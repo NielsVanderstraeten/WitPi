@@ -21,7 +21,7 @@ public class PositionManager {
 	
 	private Logger logger;
 	private FileHandler fh;
-	private final boolean logging = true;
+	private final boolean logging = false;
 	
 	public PositionManager(Vector currentPosition, Pi pi) throws SecurityException, IOException{
 		if (logging) {
