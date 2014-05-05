@@ -64,9 +64,9 @@ public class PositionManager {
 		
 	//1 = vooruit, -1 = achteruit, 0 = blijf
 	private int horizontalMovement() {
-		if (targetPosition.getX() - currentPosition.getX() > 100)
+		if (targetPosition.getX() - currentPosition.getX() > 500)
 			return 1;
-		else if (targetPosition.getX() - currentPosition.getX() < -100)
+		else if (targetPosition.getX() - currentPosition.getX() < -500)
 			return -1;
 		else
 			return 0;
@@ -75,9 +75,9 @@ public class PositionManager {
 	
 	//1 = rechts, 2 = links, 0 = blijf
 	private int verticalMovement() {
-		if (targetPosition.getY() - currentPosition.getY() > 100)
+		if (targetPosition.getY() - currentPosition.getY() > 500)
 			return 1;
-		else if (targetPosition.getY() - currentPosition.getY() < -100)
+		else if (targetPosition.getY() - currentPosition.getY() < -500)
 			return -1;
 		else
 			return 0;
@@ -128,18 +128,18 @@ public class PositionManager {
 	@Deprecated
 	private double calculateHorizontalDistanceToMid(Vector middelpunt) {
 		if (horizontalMovement() == 1) { //Richting links
-			return middelpunt.getDistance(new Vector(currentPosition.getX() - 100, currentPosition.getY()));
+			return middelpunt.getDistance(new Vector(currentPosition.getX() - 500, currentPosition.getY()));
 		} else { //Richting rechts
-			return middelpunt.getDistance(new Vector(currentPosition.getX() + 100, currentPosition.getY()));
+			return middelpunt.getDistance(new Vector(currentPosition.getX() + 500, currentPosition.getY()));
 		}
 	}
 	
 	@Deprecated
 	private double calculateVerticalDistanceToMid(Vector middelpunt) {
 		if (verticalMovement() == 1) { //Richting omhoog
-			return middelpunt.getDistance(new Vector(currentPosition.getX(), currentPosition.getY() - 100));
+			return middelpunt.getDistance(new Vector(currentPosition.getX(), currentPosition.getY() - 500));
 		} else { //Richting omlaag
-			return middelpunt.getDistance(new Vector(currentPosition.getX(), currentPosition.getY() + 100));
+			return middelpunt.getDistance(new Vector(currentPosition.getX(), currentPosition.getY() + 500));
 		}
 	}
 	
