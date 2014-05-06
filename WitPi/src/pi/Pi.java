@@ -20,7 +20,7 @@ public class Pi {
 	final double minPower = 824;
 	private PiRabbitClient client;
 	private String host = "localhost";
-	//private String host = "192.168.2.134";
+	//private String host = "192.168.2.100";
 	private String serverName = "server";
 	
 	private Vector middelpunt;
